@@ -1,0 +1,35 @@
+{
+  "name": "reactifier",
+  "version": "0.1.0",
+  "description": "A blog post aggregator bringing together React developers from across the globe.",
+  "scripts": {
+    "test": "istanbul cover _mocha"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bkonkle/reactifier.git"
+  },
+  "keywords": [
+    "react",
+    "rss",
+    "aggregator"
+  ],
+  "author": "Brandon Konkle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bkonkle/reactifier/issues"
+  },
+  "homepage": "https://github.com/bkonkle/reactifier#readme",
+  "dependencies": {
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.2.1",
+    "gulp-sass": "^2.0.4",
+    "gulp-util": "^3.0.6",
+    "gulp-front-matter": "^1.2.3"
+  },
+  "devDependencies": {
+    "babel-eslint": "^4.1.1",
+    "eslint": "^1.3.1",
+  }
+}
