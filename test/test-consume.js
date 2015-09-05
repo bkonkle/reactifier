@@ -3,24 +3,12 @@ import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import facebookPosts from './fixtures/facebookPosts';
 import konklePosts from './fixtures/konklePosts';
+import subscriptions from './fixtures/subscriptions';
 import proxyquire from 'proxyquire';
 
 chai.use(chaiAsPromised);
 
 describe('consume', function() {
-
-  const subscriptions = [
-    {
-      title: 'Official React Blog',
-      description: 'Facebook\'s official React Blog feed',
-      url: 'https://facebook.github.io/react/feed.xml',
-    },
-    {
-      title: 'Brandon Konkle\'s Blog',
-      description: 'React posts by Brandon Konkle',
-      url: 'http://konkle.us/tag/react/rss',
-    },
-  ];
 
   const {
     getSubscriptionFeed,
@@ -85,31 +73,45 @@ describe('consume', function() {
 
   describe('combineFeeds()', function() {
 
-    const facebook = facebookPosts.map(transformPost);
-    const konkle = konklePosts.map(transformPost);
+    const transformedFacebook = facebookPosts.map(function(post) {
+      return Object.assign({}, transformPost(post), {subscription: subscriptions[0]});
+    });
 
-    it('reduces a subscription into a an array of posts', function() {
-      const result = combineFeeds([], {posts: konklePosts});
-      expect(result).to.deep.equal(konklePosts);
+    const transformedKonkle = konklePosts.map(function(post) {
+      return Object.assign({}, transformPost(post), {subscription: subscriptions[1]});
+    });
+
+    it('reduces a subscription into a an array of posts with extra metadata describing the original feed', function() {
+      const expectedPosts = konklePosts.map(function(post) {
+        return Object.assign({}, post, {
+          subscription: subscriptions[1],
+        });
+      });
+
+      const feed = Object.assign({}, subscriptions[1], {posts: expectedPosts});
+      const result = combineFeeds([], feed);
+
+      expect(result).to.deep.equal(expectedPosts);
     });
 
     it('merges new posts into the existing array of posts, sorted in descending order by date', function() {
-      const result = combineFeeds(facebook, {posts: konkle});
+      const feed = Object.assign({}, subscriptions[1], {posts: transformedKonkle});
+      const result = combineFeeds(transformedFacebook, feed);
 
       expect(result).to.deep.equal([
-        konkle[0],
-        facebook[0],
-        facebook[1],
-        facebook[2],
-        facebook[3],
-        facebook[4],
-        facebook[5],
-        facebook[6],
-        facebook[7],
-        facebook[8],
-        facebook[9],
-        konkle[1],
-        konkle[2],
+        transformedKonkle[0],
+        transformedFacebook[0],
+        transformedFacebook[1],
+        transformedFacebook[2],
+        transformedFacebook[3],
+        transformedFacebook[4],
+        transformedFacebook[5],
+        transformedFacebook[6],
+        transformedFacebook[7],
+        transformedFacebook[8],
+        transformedFacebook[9],
+        transformedKonkle[1],
+        transformedKonkle[2],
       ]);
     });
 
@@ -117,11 +119,9 @@ describe('consume', function() {
       // Since mocha times out at 2 seconds, this test will fail if the combine
       // feeds function takes longer than 2 seconds for 1000 feeds
       for (let i = 0; i < 1000; i++) {
-        combineFeeds(facebook, {posts: konkle});
+        combineFeeds(transformedFacebook, {posts: transformedKonkle});
       }
     });
-
-    it('adds metadata to each post describing the feed it came from');
 
   });
 

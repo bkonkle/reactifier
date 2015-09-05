@@ -3,6 +3,7 @@ import moment from 'moment';
 import request from 'request';
 import string from 'string';
 import subscriptions from '../subscriptions';
+import lodash from 'lodash';
 
 export function getSubscriptionFeed() {
   // For each feed, request the posts
@@ -33,8 +34,8 @@ export function getSubscriptionFeed() {
 }
 
 export function requestPosts(subscription) {
-  const {url, title} = subscription;
-  const req = request(url);
+  const {title, feedLink} = subscription;
+  const req = request(feedLink);
   const feedparser = new FeedParser();
 
   // Return a promise that will resolve when the feed is retrieved
@@ -84,24 +85,16 @@ export function transformPost(post) {
 }
 
 export function combineFeeds(combined, feed) {
+  const subscription = lodash.omit(feed, 'posts');
+
+  // Add the subscription data to each post
+  const posts = feed.posts.map(
+    (post) => Object.assign({}, post, {subscription})
+  );
+
   // Combine the posts
-  const result = combined.concat(feed.posts);
+  const result = combined.concat(posts);
 
-  // Sort the result
-  result.sort(function(a, b) {
-    const pubDateA = moment(a.pubDate);
-    const pubDateB = moment(b.pubDate);
-
-    if (pubDateA.isBefore(pubDateB)) {
-      return 1;
-    } else if (pubDateA.isAfter(pubDateB)) {
-      return -1;
-    } else if (pubDateA.isSame(pubDateB)) {
-      return 0;
-    } else {
-      throw new Error(`Date comparison between ${a} and ${b} failed.`);
-    }
-  });
-
-  return result;
+  // Sort them by the pubDate in descending order, parsed by moment
+  return lodash.sortBy(result, (post) => -moment(post.pubDate).valueOf());
 }
