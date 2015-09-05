@@ -11,5 +11,8 @@ A blog post aggregator bringing together React developers from across the globe.
 * To add a new feed, a pull request can be created.
 * For each new post, create a markdown file with yaml front matter for metadata
   and a preview of the post in the markdown body.
-* Generate a static site to host the post previews, including an rss feed.
+* Existing markdown files will be indexed to make it easy to identify if a file
+  is new or not.
+* After all new posts are saved, generate a static site to host the post
+  previews, including an rss feed.
 * Host the static site through S3.
