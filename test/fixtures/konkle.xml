@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Brandon Konkle]]></title><description><![CDATA[Web application developer, supporter of social justice, avid online gamer, and enthusiastic nerd.]]></description><link>http://konkle.us/</link><generator>Ghost 0.6</generator><lastBuildDate>Sat, 05 Sep 2015 20:39:34 GMT</lastBuildDate><atom:link href="http://konkle.us/tag/react/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[State Management with Redux]]></title><description><![CDATA[<p>If you follow React developers on Twitter, you've probably been hearing the name <a href="https://www.npmjs.com/package/redux">Redux</a> come up a lot lately. There's a good reason for this - Redux solves one of the biggest and most frustrating pain points for most React developers - state management. In this article I'll describe the</p>]]></description><link>http://konkle.us/state-management-with-redux/</link><guid isPermaLink="false">565055d2-ebab-4a51-b4e0-ffdbceca5f2b</guid><category><![CDATA[React]]></category><category><![CDATA[JavaScript]]></category><dc:creator><![CDATA[Brandon Konkle]]></dc:creator><pubDate>Sat, 05 Sep 2015 15:49:50 GMT</pubDate><media:content url="http://konkleus.s3.amazonaws.com/content/images/2015/09/atom.jpg" medium="image"/><content:encoded><![CDATA[<img src="http://konkleus.s3.amazonaws.com/content/images/2015/09/atom.jpg" alt="State Management with Redux"><p>If you follow React developers on Twitter, you've probably been hearing the name <a href="https://www.npmjs.com/package/redux">Redux</a> come up a lot lately. There's a good reason for this - Redux solves one of the biggest and most frustrating pain points for most React developers - state management. In this article I'll describe the problem of state management and how I've dealt with it over time, why we chose Redux to make things better, and how Redux works.</p>
+
+<h2 id="activatethefluxcapacitor">Activate the Flux Capacitor!</h2>
+
+<p>It's easy for developers to get themselves into trouble with the built-in state management that React provides. It's component-specific, it's mutable and could change at any time, developers often duplicate pieces of state across multiple components, and it ends up being very difficult to follow exactly what's happening when and what side effects it will have.</p>
+
+<p>To ease the pain, Facebook posted more about their application structure, which they call <a href="https://facebook.github.io/flux/">Flux</a>. This architecture is based on a one-way data flow where actions are dispatched to update stores, which triggers a refresh of the views (which are React components). This structure is likely one of the big reasons that React's popularity has grown as quickly as it has. It released developers from the challenge of managing two-way bindings and resolving multiple sources of truth.</p>
+
+<p>The pain wasn't completely alleviated, however. When developing complex interfaces, developers often had to pass dozens and dozens of properties from the top of the tree all the way down to the deeply nested elements that actually cared about that state. Every parent element had to be deeply concerned about what its children needed.</p>
+
+<h2 id="badparenting">Bad Parenting</h2>
+
+<p>At Craftsy, we started looking for ways to overcome this challenge and make state even easier to work with. At first, we embraced a dispatcher based on EventEmitter2 and used it with Backbone-inspired models that our React components watched. This worked well with very simple components, but as our interfaces become more complicated we soon ran into race conditions and confusing data flows. Our code became a tangled mess that was difficult to debug and maintain.</p>
+
+<p>After seeing libraries like Om and Este.js emerge, I was inspired to address the problem of state management using a global state container. With this approach, you have one central place where state is maintained. You can instrument the state container to gain a better understanding of how state is changing over time. You can save your user's state and restore it later. You can replay state changes on your local machine to debug issues in production.</p>
+
+<p>To avoid the problem of passing numerous props down endless branches of the component tree, I implemented a solution inspired by an excellent post that <a href="https://twitter.com/dan_abramov">Dan Abramov</a> had just published at the time - <a href="https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750">"Mixins are Dead. Long Live Composition"</a>. I embraced the idea of higher-order components and created what we called "Bad Parent".</p>
+
+<p>With Bad Parent, parent components didn't have to care at all about what their child components needed. Child components could simply wrap themselves in my <code>&lt;ListenToState&gt;</code> wrapper component, which would inject portions of the global state into the wrapped component via props. When the state changed, the ListenToState wrapper would trigger a re-render, which would in turn re-render the child components. We began to form the idea of smart components that subscribed to the state they needed, and generic dumb components that simply accepted props to customize behavior and presentation.</p>
+
+<p>Our team loved the Bad Parent structure and quickly began to improve on it as they used it in their projects. They expanded it with the concept of derived properties, and began working on ways to improve the wrapper component using a functional <code>compose()</code> style that took functions which mapped state to props and defined actions that transformed the state. One change we made that was a step in the wrong direction, in my opinion, was to move from a global state container to multiple state containers. This helped us maintain our rapidly expanding pool of state in a more organized way, but we lost all of the advantages of global state.</p>
+
+<h2 id="thediscoveryofredux">The Discovery of Redux</h2>
+
+<p>After a few iterations on this, we stumbled across Dan Abramov's Redux. The React bindings with the <code>connect()</code> function looked surprisingly similar to what we were working on, but the overall structure of state management with reducers and the reselect library for derived data was well ahead of where we were. It combined the organizational benefit of having multiple state managers (implemented as reducers) with the power of a global state container. We quickly embraced Redux and found that it solved all of the challenges we had with our Bad Parent structure, and a whole lot more!</p>
+
+<p>With Redux, state transformations are handled via pure reducer functions. The state is kept immutable and reducers return transformed copies of the state. Side effects are strictly avoided so that your state is always predictable and replayable. In addition, the library is easy to use in the browser, on the server, and even in React Native applications. Abramov couples this with a dev server for React that implements hot reloading - live updates to your components as you edit them with no refresh needed - and time travel - moving forward and backward through state transitions.</p>
+
+<h2 id="theincrediblemachine">The Incredible Machine</h2>
+
+<p>Redux works by defining a store - a global state container. When you dispatch an action, the store passes the action to its reducer to generate a new copy of the state that has been transformed based on the action. The reducer can actually delegate to any number of smaller reducers to handle transformations for different portions of the state. For example, you may have a user reducer that handles transformations for the 'user' key in the global state.</p>
+
+<p>Using the react-redux bindings, you can use <code>connect()</code> to inject portions of the state into a components props, just as we were doing with Bad Parent. The connect function accepts a variety of options, including functions that map state to props, map action dispatchers to props, and more. When the portion of the state your component is connected to changes, your component re-renders with the new state.</p>
+
+<p>To extend Redux's functionality, you can apply middleware that takes control after an action is dispatched and before it is passed to a reducer. One simple yet powerful middleware that Abramov provides is called 'redux-thunk', and it allows for asynchronous action creators. This is the best place to make api calls to retrieve additional data needed for state transformations.</p>
+
+<h2 id="goforthandreduce">Go Forth and Reduce!</h2>
+
+<p>To learn more about how Redux works and how best to use it, set aside some time and read through his very detailed <a href="http://rackt.github.io/redux/index.html">documentation</a>. I'm planning to create a screencast series soon to walk developers through the process of creating a simple isomorphic application using Redux and React, so keep an eye on my blog in the weeks ahead.</p>
+
+<p>If you'd like to support Abramov as he works tirelessly to improve Redux, check out his <a href="https://www.patreon.com/reactdx?ty=h">Patreon page</a> and make a monthly pledge!</p>
+
+<p>If you've got questions for me, you can find me on Twitter as <a href="https://twitter.com/bkonkle">@bkonkle</a>, on Github as <a href="https://github.com/bkonkle">bkonkle</a>, or on Facebook as <a href="https://www.facebook.com/brandon.konkle">brandon.konkle</a>. I also frequent great Slack communities like <a href="http://www.reactiflux.com/">Reactiflux</a>, <a href="http://denverdevs.org/">Denver Devs</a>, and <a href="http://www.gettechfriends.com/">TechFriends</a>.</p>
+
+<p>Thanks for reading!</p>]]></content:encoded></item><item><title><![CDATA[Architecting Your App with React - Part 1]]></title><description><![CDATA[<p>In May of last year, Facebook released an open source library for building frontend components called <a href="http://facebook.github.io/react/">React</a>. It's built around some rather unorthodox philosophies about the browser and application structure, but over time it has gained quite a bit of steam as many developers see the advantages it offers. One</p>]]></description><link>http://konkle.us/architecting-your-app-react-part-1/</link><guid isPermaLink="false">4a7fbc8f-9c09-481c-b5c3-beefb64273bd</guid><category><![CDATA[React]]></category><category><![CDATA[JavaScript]]></category><dc:creator><![CDATA[Brandon Konkle]]></dc:creator><pubDate>Tue, 11 Mar 2014 12:45:00 GMT</pubDate><content:encoded><![CDATA[<p>In May of last year, Facebook released an open source library for building frontend components called <a href="http://facebook.github.io/react/">React</a>. It's built around some rather unorthodox philosophies about the browser and application structure, but over time it has gained quite a bit of steam as many developers see the advantages it offers. One of the most striking distinctives of React is the virtual DOM that it provides in order to minimize changes to the actual browser DOM and provide impressive rendering performance.</p>
+
+<p>React is not a full MVC framework, and this is actually one of its strengths. Many who adopt React choose to do so alongside their favorite MVC framework, like Backbone. React has no opinions about routing or syncing data, so you can easily use your favorite tools to handle those aspects of your frontend application. You'll often see React used to manage specific parts of an application's UI and not others. React really shines, however, when you fully embrace its strategies and make it the core of your application's interface.</p>
+
+<h2 id="avoidthedomwhereverpossible">Avoid the DOM wherever possible</h2>
+
+<p>React provides a virtual DOM implemented entirely as JavaScript classes. This is so that you can make numerous updates to your applications element tree without actually incurring the overhead of browser DOM manipulations. With modern engines such as V8, JavaScript is extremely fast. So fast, in fact, that it's entirely possible for you to render your entire application every time your data changes, eliminating the need for you to manipulate elements in place or manage two-way binding. React will periodically diff the virtual DOM against the browser DOM, and make the minimal set of changes needed to bring the browser DOM into sync.</p>
+
+<h2 id="onewaydataflow">One-way data flow</h2>
+
+<p>When the cost of rendering is so dramatically reduced, you are now free to take a much more declarative approach to managing your interface. Instead of implementing complex manipulations to update your elements in place and keep multiple sources of state in sync as data changes, you can keep your state in one place and describe your interface based on that. As things change, your component reacts by re-rendering.</p>
+
+<p>When your whole application is build around this, you can pass immutable data from the top level down to various child components and then re-render your whole application from the top down when anything changes. It changes how you think about your application and often ends up simplifying things a great deal.</p>
+
+<h2 id="thebrowserasarenderingengine">The browser as a rendering engine</h2>
+
+<p>This is a pretty radical departure from the strategy of most frontend MVC frameworks, which strive to reduce re-rendering as much as possible by automatically manipulating data in place with two-way binding. When I first started looking into React, I wasn't convinced. The turning point for me was when I watched a video where <a href="https://www.youtube.com/watch?v=DgVS-zXgMTk#t=1432">Pete Hunt compared React to the Doom 3 rendering engine</a>.</p>
+
+<p><img src="https://lincolnloop.com/uploads/uploads/Screen_Shot_2014-01-27_at_9.14.01_AM.png" alt="The Doom 3 rendering engine"></p>
+
+<p>In the diagram, the game state is fed into a "frontend" layer of logic and abstraction over the lower-level graphics code. This leads to the creation of a "scene intermediate representation" which describes what the user should see. This is given to the "backend", which takes that representation and turns it into OpenGL operations, which renders the scene with the graphics card. React works in a very similar way.</p>
+
+<p><img src="https://lincolnloop.com/uploads/uploads/Screen_Shot_2014-01-27_at_9.14.21_AM.png" alt="React compared to Doom 3"></p>
+
+<p>When something changes in the application state due to browser or realtime events, your application takes that state and passes it down to your components to create an intermediate representation of your user interface using the virtual DOM. No actual changes are made to the browser DOM right away, however. React periodically takes the virtual DOM and calculates the DOM operations needed, similar to how the game engine takes the scene IR and determines what OpenGL operations are needed. The browser takes the DOM and renders it to the screen.</p>
+
+<p>In both the browser and game engine, the slow part is actually rendering the intermediate representation to the screen. You can make many small changes to the virtual DOM very quickly.  React optimizes the part that matters, so you don't have to sacrifice performance for code quality.</p>
+
+<h2 id="moreresources">More resources</h2>
+
+<p>In Part 2, I'll demonstrate how we use React to put these philosophies into practice. I'll share how we set up a top-level application component that renders an interface composed of smaller components with different responsibilities, and I'll describe how we integrate routing and data syncing into this structure.</p>
+
+<p>In the meantime, take a look at the resources below if you would like to know more about React and how it works.</p>
+
+<ul>
+<li><a href="http://facebook.github.io/react/">The React homepage</a></li>
+<li><a href="http://facebook.github.io/react/docs/videos.html">Videos</a></li>
+<li><a href="http://facebook.github.io/react/docs/examples.html">Examples</a></li>
+<li><a href="https://groups.google.com/forum/#!forum/reactjs">The React Google Group</a></li>
+<li><a href="irc://chat.freenode.net/reactjs">#reactjs on Freenode</a> - the official IRC channel, which is quite active.</li>
+</ul>]]></content:encoded></item><item><title><![CDATA[React]]></title><description><![CDATA[<p>I just found out about <a href="http://facebook.github.io/react/">React</a>, a JavaScript library from Facebook </p>
+
+<p>The philosophy is really interesting. As I understand it, when there are changes to the data they render to a shadow DOM (which is very fast since nothing is actually updated on the screen), diff it against the live</p>]]></description><link>http://konkle.us/react/</link><guid isPermaLink="false">e5ad0513-79d0-451d-8405-935edcf13d43</guid><category><![CDATA[JavaScript]]></category><category><![CDATA[React]]></category><dc:creator><![CDATA[Brandon Konkle]]></dc:creator><pubDate>Mon, 18 Nov 2013 15:31:47 GMT</pubDate><content:encoded><![CDATA[<p>I just found out about <a href="http://facebook.github.io/react/">React</a>, a JavaScript library from Facebook </p>
+
+<p>The philosophy is really interesting. As I understand it, when there are changes to the data they render to a shadow DOM (which is very fast since nothing is actually updated on the screen), diff it against the live document, and then use the diff to update the document. The result is that re-rendering the whole UI becomes so cheap that you can do it whenever something changes rather than using data binding to update values.</p>
+
+<p>It would also be interesting to experiment with server-side rendering for client-side apps.</p>
+
+<p>An Instagram engineer talking about it: <a href="http://qr.ae/GtKbP">http://qr.ae/GtKbP</a></p>
+
+<p>Sounds like a very fascinating alternative to data binding!</p>]]></content:encoded></item></channel></rss>

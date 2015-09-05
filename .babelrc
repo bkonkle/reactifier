@@ -10,4 +10,5 @@
     "es6.spread",
     "es6.templateLiterals"
   ],
+  "plugins": ["object-assign"]
 }

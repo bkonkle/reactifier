@@ -1,0 +1,12 @@
+[
+  {
+    "title": "Official React Blog",
+    "description": "Facebook's official React Blog feed",
+    "url": "https://facebook.github.io/react/feed.xml"
+  },
+  {
+    "title": "Brandon Konkle's Blog",
+    "description": "React posts by Brandon Konkle",
+    "url": "http://konkle.us/tag/react/rss"
+  }
+]
