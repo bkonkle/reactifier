@@ -1,5 +1,8 @@
 import chai, {expect} from 'chai';
+import path from 'path';
 import proxyquire from 'proxyquire';
+import fs from 'fs';
+import samplePost from './fixtures/sample-post';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
@@ -8,9 +11,16 @@ chai.use(sinonChai);
 describe('save', function() {
   const awsSpy = sinon.spy();
 
-  const {saveFeed} = proxyquire('../src/save', {
-    'AWS': awsSpy,
-  });
+  const {
+    saveFeed,
+    getIndex,
+    toIndex,
+    saveIndex,
+    toMarkdown,
+    savePost,
+  } = proxyquire('../src/save', {'AWS': awsSpy});
+
+  const sampleMarkdown = fs.readFileSync(path.join(__dirname, 'fixtures', 'sample-post.md')).toString();
 
   describe('saveFeed()', function() {
 
@@ -48,7 +58,10 @@ describe('save', function() {
 
   describe('toMarkdown()', function() {
 
-    it('takes a post and converts it to markdown');
+    it('takes a post and converts it to markdown', function() {
+      const result = toMarkdown(samplePost);
+      expect(result).to.equal(sampleMarkdown);
+    });
 
   });
 
