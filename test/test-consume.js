@@ -109,14 +109,6 @@ describe('consume', function() {
       ]);
     });
 
-    it('shouldn\'t take too long', function() {
-      // Since mocha times out at 2 seconds, this test will fail if the combine
-      // feeds function takes longer than 2 seconds for 1000 feeds
-      for (let i = 0; i < 1000; i++) {
-        combineFeeds(transformedFacebook, {posts: transformedKonkle});
-      }
-    });
-
   });
 
 });

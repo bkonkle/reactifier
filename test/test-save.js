@@ -1,58 +1,140 @@
-import chai, {expect} from 'chai';
+import {expect} from 'chai';
+import md5 from 'md5';
 import path from 'path';
 import proxyquire from 'proxyquire';
 import fs from 'fs';
 import samplePost from './fixtures/sample-post';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-
-chai.use(sinonChai);
 
 describe('save', function() {
-  const awsSpy = sinon.spy();
+  const sampleMarkdown = fs.readFileSync(path.join(__dirname, 'fixtures', 'sample-post.md')).toString();
+
+  const guid = 'https://facebook.github.io/react/blog/2015/09/02/new-react-developer-tools.html';
+
+  const sampleIndex = {};
+  sampleIndex[guid] = {
+    unixDate: 1441177200000,
+    path: `posts/${md5(guid)}.md`,
+  };
+
+  // Set up a reference to a mock S3 interface which can be implemented by each
+  // test as needed
+  let mockS3 = {};
+
+  afterEach(function() {
+    // Reset the mock
+    mockS3 = {};
+  });
 
   const {
     saveFeed,
     getIndex,
-    toIndex,
+    addToIndex,
     saveIndex,
     toMarkdown,
     savePost,
-  } = proxyquire('../src/save', {'AWS': awsSpy});
-
-  const sampleMarkdown = fs.readFileSync(path.join(__dirname, 'fixtures', 'sample-post.md')).toString();
+  } = proxyquire('../src/save', {
+    'aws-sdk': {
+      S3: () => mockS3,
+      config: {},
+      SharedIniFileCredentials: () => null,
+      '@noCallThru': true,
+    },
+  });
 
   describe('saveFeed()', function() {
 
-    it('takes an array of posts and converts them to markdown files if they are new');
+    it('calls s3.getObject to get the index', function() {
+      mockS3.getObject = function(options, callback) {
+        expect(options.Key).to.equal('index.json');
+        callback(undefined, {Body: JSON.stringify(sampleIndex)});
+      };
 
-    it('takes each post and determines the appropriate filename');
+      return saveFeed([samplePost]);
+    });
 
-    it('gets the markdown for the post');
 
-    it('saves the post markdown to the bucket');
+    it('calls s3.upload for each new post', function() {
+      mockS3.getObject = function(options, callback) {
+        // Return an empty index
+        callback(undefined, {Body: JSON.stringify({})});
+      };
 
-    it('adds the post to the index and saves it');
+      mockS3.upload = function(options, callback) {
+        expect(options.Key).to.equal(`posts/${md5(samplePost.guid)}.md`);
+        expect(options.Body).to.equal(sampleMarkdown);
 
+        // Return a Location (a real response would also include an ETag)
+        callback(undefined, {Location: '/sample/location'});
+      };
+
+      const result = saveFeed([samplePost]);
+
+      // The result should be an array with the Location response
+      return expect(result).to.eventually.deep.equal([{Location: '/sample/location'}]);
+    });
   });
 
   describe('getIndex()', function() {
 
-    it('retrieves the current index');
+    it('retrieves the current index', function() {
+      mockS3.getObject = function(options, callback) {
+        expect(options.Key).to.equal('index.json');
+        callback(undefined, {Body: JSON.stringify(sampleIndex)});
+      };
 
-    it('creates a new index if none exists in the bucket');
+      const promise = getIndex(mockS3);
+
+      return expect(promise).to.eventually.deep.equal(sampleIndex);
+    });
+
+    it('returns a blank index if none exists in the bucket', function() {
+      mockS3.getObject = function(options, callback) {
+        expect(options.Key).to.equal('index.json');
+        callback({code: 'NoSuchKey'});
+      };
+
+      const promise = getIndex(mockS3);
+
+      return expect(promise).to.eventually.deep.equal({});
+    });
 
   });
 
-  describe('toIndex()', function() {
+  describe('addToIndex()', function() {
 
-    it('creates a new index entry for the given post');
+    it('creates a new index entry for the given post', function() {
+      const index = {};
+      const result = addToIndex(index, samplePost);
+      expect(result).to.deep.equal(sampleIndex);
+    });
+
+    it('doesn\'t mutate the index', function() {
+      const index = {test: 'test123'};
+      const expectedIndex = {test: 'test123'};
+
+      addToIndex(index, samplePost);
+
+      expect(index).to.deep.equal(expectedIndex);
+    });
 
   });
 
   describe('saveIndex()', function() {
 
-    it('saves a new index to the bucket');
+    it('saves a new index to the bucket', function() {
+      const response = {};
+      const index = {batman: 'forever'};
+
+      mockS3.upload = function(options, callback) {
+        expect(options.Key).to.equal('index.json');
+        expect(options.Body).to.equal(JSON.stringify(index));
+        callback(undefined, response);
+      };
+
+      const promise = saveIndex(mockS3, index);
+
+      return expect(promise).to.eventually.equal(response);
+    });
 
   });
 
@@ -67,7 +149,19 @@ describe('save', function() {
 
   describe('savePost()', function() {
 
-    it('takes a filename and content, and saves the post to S3');
+    it('takes a filename and content, and saves the post to S3', function() {
+      const response = {};
+
+      mockS3.upload = function(options, callback) {
+        expect(options.Key).to.equal(`posts/${md5(samplePost.guid)}.md`);
+        expect(options.Body).to.equal(sampleMarkdown);
+        callback(undefined, response);
+      };
+
+      const promise = savePost(mockS3, samplePost);
+
+      return expect(promise).to.eventually.equal(response);
+    });
 
   });
 

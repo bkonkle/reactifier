@@ -1,9 +1,12 @@
+import createLogger from './create-logger';
 import FeedParser from 'feedparser';
+import lodash from 'lodash';
 import moment from 'moment';
 import request from 'request';
 import string from 'string';
 import subscriptions from '../subscriptions';
-import lodash from 'lodash';
+
+const log = createLogger('consume');
 
 export function getSubscriptionFeed() {
   // For each feed, request the posts
