@@ -1,4 +1,4 @@
-import {getFacebookTestUtils, cleanUpNock} from './utils';
+import {getFacebookFeed, getKonkleFeed, cleanUpNock} from './utils';
 import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import facebookPosts from './fixtures/facebook-posts';
@@ -20,7 +20,8 @@ describe('consume', function() {
     '../subscriptions': subscriptions,
   });
 
-  const {facebookFeed} = getFacebookTestUtils();
+  const facebookFeed = getFacebookFeed();
+  getKonkleFeed();
 
   cleanUpNock();
 
@@ -39,8 +40,8 @@ describe('consume', function() {
       const promise = requestPosts(subscriptions[0])
 
         // Convert to and from JSON so that the output matches what's expected
-        .then((posts) => JSON.stringify(posts))
-        .then((posts) => JSON.parse(posts));
+        .then(posts => JSON.stringify(posts))
+        .then(posts => JSON.parse(posts));
 
       return expect(promise).to.eventually.deep.equal(facebookPosts);
     });
