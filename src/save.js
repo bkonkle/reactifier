@@ -14,36 +14,39 @@ export function saveFeed(feed) {
 
   const s3 = new AWS.S3({params: {Bucket: process.env.S3_BUCKET}});
 
-  const index = getIndex(s3);
+  return getIndex(s3)
 
-  const promises = [];
+    // When the index is retrieved, it's time to begin saving new posts
+    .then(function(index) {
+      const promises = [];
 
-  feed.forEach(function(post) {
-    if (!index.hasOwnProperty(post.guid)) {
-      // If the post is not yet in the index, save it and add it to the index
-      const promise = savePost(s3, post)
+      feed.forEach(function(post) {
+        if (!index.hasOwnProperty(post.guid)) {
+          // If the post is not yet in the index, save it and add it to the index
+          const promise = savePost(s3, post)
 
-        .then(function() {
-          // Now that the post is saved, add it to the index
-          const newIndex = addToIndex(index, post);
+            .then(function() {
+              // Now that the post is saved, add it to the index
+              const newIndex = addToIndex(index, post);
 
-          // Return the promise from saveIndex
-          return saveIndex(newIndex).then(value => {
-            console.log('value ------------>', value);
-            return value;
-          });
-        })
+              // Return the promise from saveIndex
+              return saveIndex(s3, newIndex).then(value => {
+                return value;
+              });
+            })
 
-        .catch(function(err) {
-          log.error(err);
-        });
+            .catch(function(err) {
+              log.error(err);
+            });
 
-      // Add the promise to the array of promises to wait for
-      promises.push(promise);
-    }
-  });
+          // Add the promise to the array of promises to wait for
+          promises.push(promise);
+        }
+      });
 
-  return Promise.all(promises);
+      // Return a promise that resolves when all of the posts have been saved
+      return Promise.all(promises);
+    });
 }
 
 export function getIndex(s3) {

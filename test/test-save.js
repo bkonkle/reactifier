@@ -43,6 +43,13 @@ describe('save', function() {
 
   describe('saveFeed()', function() {
 
+    const indexWithSamplePost = {
+      'https://facebook.github.io/react/blog/2015/09/02/new-react-developer-tools.html': {
+        unixDate: 1441177200000,
+        path: 'posts/849e91628c7acbed1e6cee37ed7488ed.md',
+      },
+    };
+
     it('calls s3.getObject to get the index', function() {
       mockS3.getObject = function(options, callback) {
         expect(options.Key).to.equal('index.json');
@@ -52,7 +59,6 @@ describe('save', function() {
       return saveFeed([samplePost]);
     });
 
-
     it('calls s3.upload for each new post', function() {
       mockS3.getObject = function(options, callback) {
         // Return an empty index
@@ -60,18 +66,82 @@ describe('save', function() {
       };
 
       mockS3.upload = function(options, callback) {
-        expect(options.Key).to.equal(`posts/${md5(samplePost.guid)}.md`);
-        expect(options.Body).to.equal(sampleMarkdown);
+        if (options.Key === 'index.json') {
+          // Send a Location just so that we can check the result below
+          callback(undefined, {Location: 'index.json'});
+        } else {
+          expect(options.Key).to.equal(`posts/${md5(samplePost.guid)}.md`);
+          expect(options.Body).to.equal(sampleMarkdown);
 
-        // Return a Location (a real response would also include an ETag)
-        callback(undefined, {Location: '/sample/location'});
+          // Send an empty response, because this isn't important
+          callback(undefined, {});
+        }
       };
 
       const result = saveFeed([samplePost]);
 
       // The result should be an array with the Location response
-      return expect(result).to.eventually.deep.equal([{Location: '/sample/location'}]);
+      return expect(result).to.eventually.deep.equal([{Location: 'index.json'}]);
     });
+
+    it('doesn\'t call s3.upload for posts that already exist in the index', function() {
+      const newPost = {
+        title: 'New Post',
+        link: 'https://awesome.blog/awesome/post',
+        author: null,
+        pubDate: '2015-09-13T07:00:00.000Z',
+        guid: 'https://awesome.blog/awesome/post',
+        description: 'This are awesome thread. I are awesome post.',
+      };
+
+      mockS3.getObject = function(options, callback) {
+        // Return an empty index
+        callback(undefined, {Body: JSON.stringify(indexWithSamplePost)});
+      };
+
+      mockS3.upload = function(options, callback) {
+        if (options.Key === 'index.json') {
+          // Send a Location just so that we can check the result below
+          callback(undefined, {Location: 'index.json'});
+        } else {
+          expect(options.Key).to.equal(`posts/${md5('https://awesome.blog/awesome/post')}.md`);
+
+          // Send an empty response, because this isn't important
+          callback(undefined, {});
+        }
+      };
+
+      const result = saveFeed([samplePost, newPost]);
+
+      // The result should be an array with the Location response
+      return expect(result).to.eventually.deep.equal([{Location: 'index.json'}]);
+    });
+
+    it('saves the new index', function() {
+      mockS3.getObject = function(options, callback) {
+        // Return an empty index
+        callback(undefined, {Body: JSON.stringify({})});
+      };
+
+      mockS3.upload = function(options, callback) {
+        if (options.Key === 'index.json') {
+          // Make sure the index looks like it's supposed to at this point
+          expect(options.Body).to.equal(JSON.stringify(indexWithSamplePost));
+
+          // Send a Location just so that we can check the result below
+          callback(undefined, {Location: 'index.json'});
+        } else {
+          // Send an empty response, because this isn't important
+          callback(undefined, {});
+        }
+      };
+
+      const result = saveFeed([samplePost]);
+
+      // The result should be an array with the Location response
+      return expect(result).to.eventually.deep.equal([{Location: 'index.json'}]);
+    });
+
   });
 
   describe('getIndex()', function() {
