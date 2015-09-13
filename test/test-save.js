@@ -112,15 +112,24 @@ describe('save', function() {
     });
 
     it('saves the new index', function() {
+      const existingIndex = {
+        'testGuid': {
+          unixDate: 1441177200123,
+          path: 'testPath',
+        },
+      };
+
+      const expectedIndex = Object.assign({}, existingIndex, indexWithSamplePost);
+
       mockS3.getObject = function(options, callback) {
-        // Return an empty index
-        callback(undefined, {Body: JSON.stringify({})});
+        // Return an index that already has an entry
+        callback(undefined, {Body: JSON.stringify(existingIndex)});
       };
 
       mockS3.upload = function(options, callback) {
         if (options.Key === 'index.json') {
           // Make sure the index looks like it's supposed to at this point
-          expect(options.Body).to.equal(JSON.stringify(indexWithSamplePost));
+          expect(options.Body).to.equal(JSON.stringify(expectedIndex));
 
           // Send a Location just so that we can check the result below
           callback(undefined, {Location: 'index.json'});
@@ -170,6 +179,15 @@ describe('save', function() {
       const index = {};
       const result = addToIndex(index, samplePost);
       expect(result).to.deep.equal(sampleIndex);
+    });
+
+    it('adds the new entry to existing entries', function() {
+      const index = {test: 'test123'};
+
+      const expectedIndex = Object.assign({}, index, sampleIndex);
+
+      const result = addToIndex(index, samplePost);
+      expect(result).to.deep.equal(expectedIndex);
     });
 
     it('doesn\'t mutate the index', function() {
