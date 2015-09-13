@@ -43,7 +43,7 @@ export function saveFeed(feed) {
 export function getIndex(s3) {
   // TODO: Use callS3() for this
   return new Promise(function(resolve, reject) {
-    s3.getObject({Key: 'index.json'}, function(err, data) {
+    s3.getObject({Key: 'posts/index.json'}, function(err, data) {
       if (err) {
         if (err.code === 'NoSuchKey') {
           // If the index doesn't exist, then resolve the promise with an empty
@@ -73,7 +73,7 @@ export function addToIndex(index, post) {
 
 export function saveIndex(s3, index) {
   return callS3(s3, 'upload', {
-    Key: 'index.json',
+    Key: 'posts/index.json',
     Body: JSON.stringify(index),
   });
 }

@@ -26,7 +26,7 @@ describe('generate', function() {
         // For this test, we only care about the first time it's called
         if (!called) {
           called = true;
-          expect(options.Key).to.equal('index.json');
+          expect(options.Key).to.equal('posts/index.json');
           callback(undefined, {Body: JSON.stringify(sampleIndex)});
         } else {
           // The second getObject call should be for the file itself, expecting
@@ -44,7 +44,7 @@ describe('generate', function() {
       let called = false;
 
       mockS3.getObject = function(options, callback) {
-        if (options.Key === 'index.json') {
+        if (options.Key === 'posts/index.json') {
           callback(undefined, {Body: JSON.stringify(sampleIndex)});
         } else {
           expect(options.Key).to.equal(`posts/${md5(samplePost.guid)}.md`);
@@ -63,7 +63,7 @@ describe('generate', function() {
 
     it('generates a homepage using React', function() {
       mockS3.getObject = function(options, callback) {
-        if (options.Key === 'index.json') {
+        if (options.Key === 'posts/index.json') {
           // Return the sample index
           callback(undefined, {Body: JSON.stringify(sampleIndex)});
         } else {

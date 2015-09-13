@@ -36,7 +36,11 @@ export default function reactifier() {
     // Finally, save the site to S3
     .then(function(body) {
       log.info('Uploading the site to S3...');
-      return callS3(getS3(), 'upload', {Key: 'site/index.html', Body: body});
+      return callS3(getS3(), 'upload', {
+        Key: 'index.html',
+        Body: body,
+        ContentType: 'text/html',
+      });
     })
 
     // Report success

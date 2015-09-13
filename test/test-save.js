@@ -37,8 +37,13 @@ describe('save', function() {
 
       mockS3.getObject = function(options, callback) {
         called = true;
-        expect(options.Key).to.equal('index.json');
+        expect(options.Key).to.equal('posts/index.json');
         callback(undefined, {Body: JSON.stringify(sampleIndex)});
+      };
+
+      mockS3.upload = function(options, callback) {
+        // Send an empty response, because this isn't important for this test
+        callback(undefined, {});
       };
 
       return saveFeed([samplePost]).then(function() {
@@ -56,9 +61,9 @@ describe('save', function() {
 
       mockS3.upload = function(options, callback) {
         called = true;
-        if (options.Key === 'index.json') {
+        if (options.Key === 'posts/index.json') {
           // Send a Location just so that we can check the result below
-          callback(undefined, {Location: 'index.json'});
+          callback(undefined, {Location: 'posts/index.json'});
         } else {
           expect(options.Key).to.equal(`posts/${md5(samplePost.guid)}.md`);
           expect(options.Body).to.equal(sampleMarkdown);
@@ -71,7 +76,7 @@ describe('save', function() {
       const result = saveFeed([samplePost]);
 
       // The result should be an array with the Location response
-      return expect(result).to.eventually.deep.equal({Location: 'index.json'})
+      return expect(result).to.eventually.deep.equal({Location: 'posts/index.json'})
 
         .then(function() {
           expect(called).to.be.true;
@@ -94,9 +99,9 @@ describe('save', function() {
       };
 
       mockS3.upload = function(options, callback) {
-        if (options.Key === 'index.json') {
+        if (options.Key === 'posts/index.json') {
           // Send a Location just so that we can check the result below
-          callback(undefined, {Location: 'index.json'});
+          callback(undefined, {Location: 'posts/index.json'});
         } else {
           expect(options.Key).to.equal(`posts/${md5('https://awesome.blog/awesome/post')}.md`);
 
@@ -108,7 +113,7 @@ describe('save', function() {
       const result = saveFeed([samplePost, newPost]);
 
       // The result should be an array with the Location response
-      return expect(result).to.eventually.deep.equal({Location: 'index.json'});
+      return expect(result).to.eventually.deep.equal({Location: 'posts/index.json'});
     });
 
     it('saves the new index', function() {
@@ -127,12 +132,12 @@ describe('save', function() {
       };
 
       mockS3.upload = function(options, callback) {
-        if (options.Key === 'index.json') {
+        if (options.Key === 'posts/index.json') {
           // Make sure the index looks like it's supposed to at this point
           expect(options.Body).to.equal(JSON.stringify(expectedIndex));
 
           // Send a Location just so that we can check the result below
-          callback(undefined, {Location: 'index.json'});
+          callback(undefined, {Location: 'posts/index.json'});
         } else {
           // Send an empty response, because this isn't important
           callback(undefined, {});
@@ -142,7 +147,7 @@ describe('save', function() {
       const result = saveFeed([samplePost]);
 
       // The result should be an array with the Location response
-      return expect(result).to.eventually.deep.equal({Location: 'index.json'});
+      return expect(result).to.eventually.deep.equal({Location: 'posts/index.json'});
     });
 
   });
@@ -151,7 +156,7 @@ describe('save', function() {
 
     it('retrieves the current index', function() {
       mockS3.getObject = function(options, callback) {
-        expect(options.Key).to.equal('index.json');
+        expect(options.Key).to.equal('posts/index.json');
         callback(undefined, {Body: JSON.stringify(sampleIndex)});
       };
 
@@ -162,7 +167,7 @@ describe('save', function() {
 
     it('returns a blank index if none exists in the bucket', function() {
       mockS3.getObject = function(options, callback) {
-        expect(options.Key).to.equal('index.json');
+        expect(options.Key).to.equal('posts/index.json');
         callback({code: 'NoSuchKey'});
       };
 
@@ -208,7 +213,7 @@ describe('save', function() {
       const index = {batman: 'forever'};
 
       mockS3.upload = function(options, callback) {
-        expect(options.Key).to.equal('index.json');
+        expect(options.Key).to.equal('posts/index.json');
         expect(options.Body).to.equal(JSON.stringify(index));
         callback(undefined, response);
       };
