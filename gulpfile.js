@@ -35,7 +35,7 @@ gulp.task('build:sass', function() {
   return gulp.src('media/sass/**/*.scss', {base: '.'})
 
     // First compile the sass
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
 
     // Rename the file to change the directory to 'css'
     .pipe(rename(function(path) {

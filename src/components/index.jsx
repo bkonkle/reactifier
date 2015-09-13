@@ -15,7 +15,7 @@ export default class Index extends Component {
           <link rel="stylesheet" href="media/css/style.css"/>
         </head>
         <body>
-          <h1>Reactifier.</h1>
+          <header>Reactifier<strong>.</strong></header>
         </body>
       </html>
     );

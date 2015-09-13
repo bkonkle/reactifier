@@ -10,7 +10,7 @@ dotenv.load();
 
 const log = createLogger('reactifier');
 
-/**
+/*
  * This is the main entry point of reactifier, run within Amazon Lambda. It
  * orchestrates the entire process from start to finish, resulting in a static
  * site on S3.
