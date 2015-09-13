@@ -1,84 +1,32 @@
-/* normalize-scss 3.0.2+normalize.3.0.2 | MIT/GPLv2 License | bit.ly/normalize-scss */
+/* ==========================================================================
+   Normalize.scss settings
+   ========================================================================== */
+/**
+ * Includes legacy browser support IE6/7
+ *
+ * Set to false if you want to drop support for IE6 and IE7
+ */
 
+$legacy_browser_support: false !default;
 
-// Variables and Imports
-//
-// If you have a base partial (or equivalent), you should move these lines to
-// that file. NOTE: Edit the lines to remove "!default".
-// @see http://compass-style.org/help/tutorials/best_practices/
-// =============================================================================
-
-// These 3 variables are copies of ones used in Compass' Vertical Rhythm module.
-
-  // The base font size.
-  $base-font-size: 16px !default;
-
-  // The base line height determines the basic unit of vertical rhythm.
-  $base-line-height: 24px !default;
-
-  // The length unit in which to output vertical rhythm values.
-  // Supported values: px, em, rem.
-  $rhythm-unit: 'em' !default;
-
-// This variable is a copy of the one used in Compass' support module.
-
-  // Optional map of minimum browser versions to support. For example, to
-  // remove support for IE 7 and earlier, set $browser-minimum-versions['ie']
-  // to '8'.
-  $browser-minimum-versions: (
-    'chrome':  null,
-    'firefox': null,
-    'ie':      null,
-    'safari':  null,
-    'opera':   null
-  ) !default;
-
-
-// Set this to true to force CSS output to exactly match normalize.css.
-$strict-normalize: true !default;
-
-// The default font family.
-$base-font-family: sans-serif !default;
-
-// The font sizes for h1-h6.
-$h1-font-size: 2    * $base-font-size !default;
-$h2-font-size: 1.5  * $base-font-size !default;
-$h3-font-size: 1.17 * $base-font-size !default;
-$h4-font-size: 1    * $base-font-size !default;
-$h5-font-size: 0.83 * $base-font-size !default;
-$h6-font-size: 0.67 * $base-font-size !default;
-
-// The amount lists and blockquotes are indented.
-$indent-amount: 40px !default;
-
-// After the default variables are set, import the required Compass partials.
-@import "compass/support";
-@import "compass/css3/box-sizing";
-@import "compass/typography/vertical_rhythm";
-
-
-@if not $strict-normalize or support-legacy-browser(ie, "7") {
-  /**
-   * Establish a vertical rhythm unit using $base-font-size, $base-line-height,
-   * and $rhythm-unit variables. Also, correct text resizing oddly in IE 6/7 when
-   * body `font-size` is set using `em` units.
-   */
-
-  @include establish-baseline();
-}
+/* Base
+   ========================================================================== */
 
 /**
  * 1. Set default font family to sans-serif.
- * 2. Prevent iOS text size adjust after orientation change, without disabling
- *    user zoom.
+ * 2. Prevent iOS and IE text size adjust after device orientation change,
+ *    without disabling user zoom.
+ * 3. Corrects text resizing oddly in IE 6/7 when body `font-size` is set using
+ *  `em` units.
  */
 
 html {
-  font-family: $base-font-family; /* 1 */
+  font-family: sans-serif; /* 1 */
   -ms-text-size-adjust: 100%; /* 2 */
   -webkit-text-size-adjust: 100%; /* 2 */
-  // Show a background image that can be used to debug your alignments.
-  // @include debug-vertical-alignment();
+  @if $legacy_browser_support {
+    *font-size: 100%; /* 3 */
+  }
 }
 
 /**
@@ -116,7 +64,7 @@ summary {
 }
 
 /**
- * 1. Correct `inline-block` display not defined in IE 8/9.
+ * 1. Correct `inline-block` display not defined in IE 6/7/8/9 and Firefox 3.
  * 2. Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.
  */
 
@@ -124,18 +72,16 @@ audio,
 canvas,
 progress,
 video {
-  @if support-legacy-browser(ie, "9") {
-    display: inline-block; /* 1 */
-    @if support-legacy-browser(ie, "7") {
-      *display: inline;
-      *zoom: 1;
-    }
-  }
+  display: inline-block; /* 1 */
   vertical-align: baseline; /* 2 */
+  @if $legacy_browser_support {
+    *display: inline;
+    *zoom: 1;
+  }
 }
 
 /**
- * Prevent modern browsers from displaying `audio` without controls.
+ * Prevents modern browsers from displaying `audio` without controls.
  * Remove excess height in iOS 5 devices.
  */
 
@@ -144,20 +90,12 @@ audio:not([controls]) {
   height: 0;
 }
 
-@if support-legacy-browser(ie, "10") {
-  /**
-   * Address `[hidden]` styling not present in IE 8/9/10.
-   */
-
-  [hidden] {
-    display: none;
-  }
-}
-
 /**
- * Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.
+ * Address `[hidden]` styling not present in IE 8/9/10.
+ * Hide the `template` element in IE 8/9/10/11, Safari, and Firefox < 22.
  */
 
+[hidden],
 template {
   display: none;
 }
@@ -165,23 +103,23 @@ template {
 /* Links
    ========================================================================== */
 
-@if support-legacy-browser(ie, "10") {
-  /**
-   * Remove the gray background color from active links in IE 10.
-   */
+/**
+ * Remove the gray background color from active links in IE 10.
+ */
 
-  a {
-    background-color: transparent;
-  }
+a {
+  background-color: transparent;
 }
 
 /**
- * Improve readability when focused and also mouse hovered in all browsers.
+ * Improve readability of focused elements when they are also in an
+ * active/hover state.
  */
 
-a:active,
-a:hover {
-  outline: 0;
+a {
+  &:active, &:hover {
+    outline: 0;
+  };
 }
 
 /* Text-level semantics
@@ -204,13 +142,9 @@ strong {
   font-weight: bold;
 }
 
-@if not $strict-normalize or support-legacy-browser(ie, "7") {
-  /**
-   * Set 1 unit of vertical rhythm on the top and bottom margin.
-   */
-
+@if $legacy_browser_support {
   blockquote {
-    @include output-rhythm(margin, rhythm(1) $indent-amount);
+    margin: 1em 40px;
   }
 }
 
@@ -228,70 +162,73 @@ dfn {
  */
 
 h1 {
-  /* Set the font-size and line-height while keeping a proper vertical rhythm. */
-  @if not $strict-normalize or support-legacy-browser(ie, "7") {
-    @include adjust-font-size-to( $h1-font-size );
-  }
-  @else {
-    font-size: if($rhythm-unit == "px", $h1-font-size, ($h1-font-size / $base-font-size)#{$rhythm-unit});
-  }
-
-  /* Set 1 unit of vertical rhythm on the top and bottom margins. */
-  @include leader(1, $h1-font-size);
-  @include trailer(1, $h1-font-size);
+  font-size: 2em;
+  margin: 0.67em 0;
 }
 
-@if not $strict-normalize or support-legacy-browser(ie, "7") {
+@if $legacy_browser_support {
   h2 {
-    @include adjust-font-size-to( $h2-font-size );
-    @include leader(1, $h2-font-size);
-    @include trailer(1, $h2-font-size);
+    font-size: 1.5em;
+    margin: 0.83em 0;
   }
 
   h3 {
-    @include adjust-font-size-to( $h3-font-size );
-    @include leader(1, $h3-font-size);
-    @include trailer(1, $h3-font-size);
+    font-size: 1.17em;
+    margin: 1em 0;
   }
 
   h4 {
-    @include adjust-font-size-to( $h4-font-size );
-    @include leader(1, $h4-font-size);
-    @include trailer(1, $h4-font-size);
+    font-size: 1em;
+    margin: 1.33em 0;
   }
 
   h5 {
-    @include adjust-font-size-to( $h5-font-size );
-    @include leader(1, $h5-font-size);
-    @include trailer(1, $h5-font-size);
+    font-size: 0.83em;
+    margin: 1.67em 0;
   }
 
   h6 {
-    @include adjust-font-size-to( $h6-font-size );
-    @include leader(1, $h6-font-size);
-    @include trailer(1, $h6-font-size);
+    font-size: 0.67em;
+    margin: 2.33em 0;
   }
 }
 
-@if support-legacy-browser(ie, "9") {
-  /**
-   * Address styling not present in IE 8/9.
-   */
+/**
+ * Addresses styling not present in IE 8/9.
+ */
 
-  mark {
-    background: #ff0;
-    color: #000;
-  }
+mark {
+  background: #ff0;
+  color: #000;
 }
 
-@if not $strict-normalize or support-legacy-browser(ie, "7") {
+@if $legacy_browser_support {
+
   /**
-   * Set 1 unit of vertical rhythm on the top and bottom margin.
+   * Addresses margins set differently in IE 6/7.
    */
 
   p,
   pre {
-    @include output-rhythm(margin, rhythm(1) 0);
+    *margin: 1em 0;
+  }
+
+  /*
+   * Addresses CSS quotes not supported in IE 6/7.
+   */
+
+  q {
+    *quotes: none;
+  }
+
+  /*
+   * Addresses `quotes` property not supported in Safari 4.
+   */
+
+  q:before,
+  q:after {
+    content: '';
+    content: none;
   }
 }
 
@@ -323,76 +260,61 @@ sub {
   bottom: -0.25em;
 }
 
-@if not $strict-normalize or support-legacy-browser(ie, "7") {
-  /* Lists
+@if $legacy_browser_support {
+
+  /* ==========================================================================
+     Lists
      ========================================================================== */
 
-  /**
-   * Address margins set differently in IE 6/7.
+  /*
+   * Addresses margins set differently in IE 6/7.
    */
 
   dl,
   menu,
   ol,
   ul {
-    @include output-rhythm(margin, rhythm(1) 0);
-  }
-
-  @if not $strict-normalize {
-    /**
-     * Turn off margins on nested lists.
-     */
-
-    ol,
-    ul {
-      ol,
-      ul {
-        margin: 0;
-      }
-    }
+    *margin: 1em 0;
   }
 
   dd {
-    margin: 0 0 0 $indent-amount;
+    *margin: 0 0 0 40px;
   }
 
-  /**
-   * Address paddings set differently in IE 6/7.
+  /*
+   * Addresses paddings set differently in IE 6/7.
    */
 
   menu,
   ol,
   ul {
-    padding: 0 0 0 $indent-amount;
+    *padding: 0 0 0 40px;
   }
-}
 
-@if support-legacy-browser(ie, "7") {
-  /**
-   * Correct list images handled incorrectly in IE 7.
+  /*
+   * Corrects list images handled incorrectly in IE 7.
    */
 
   nav ul,
   nav ol {
-    list-style: none;
-    list-style-image: none;
+    *list-style: none;
+    *list-style-image: none;
   }
+
 }
 
 /* Embedded content
    ========================================================================== */
 
-@if support-legacy-browser(ie, "10") {
-  /**
-   * Remove border when inside `a` element in IE 8/9/10.
-   */
+/**
+ * 1. Remove border when inside `a` element in IE 8/9/10.
+ * 2. Improves image quality when scaled in IE 7.
+ */
 
-  img {
-    border: 0;
-    @if support-legacy-browser(ie, "7") {
-      /* Improve image quality when scaled in IE 7. */
-      -ms-interpolation-mode: bicubic;
-    }
+img {
+  border: 0;
+  @if $legacy_browser_support {
+    *-ms-interpolation-mode: bicubic; /* 2 */
   }
 }
 
@@ -407,14 +329,12 @@ svg:not(:root) {
 /* Grouping content
    ========================================================================== */
 
-@if support-legacy-browser(ie, "9") or support-legacy-browser(safari, "6") {
-  /**
-   * Address margin not present in IE 8/9 and Safari.
-   */
+/**
+ * Address margin not present in IE 8/9 and Safari.
+ */
 
-  figure {
-    @include output-rhythm(margin, rhythm(1) $indent-amount);
-  }
+figure {
+  margin: 1em 40px;
 }
 
 /**
@@ -422,7 +342,7 @@ svg:not(:root) {
  */
 
 hr {
-  @include box-sizing(content-box);
+  box-sizing: content-box;
   height: 0;
 }
 
@@ -436,6 +356,7 @@ pre {
 
 /**
  * Address odd `em`-unit font size rendering in all browsers.
+ * Correct font family set oddly in IE 6, Safari 4/5, and Chrome.
  */
 
 code,
@@ -443,7 +364,7 @@ kbd,
 pre,
 samp {
   font-family: monospace, monospace;
-  @if support-legacy-browser(ie, "6") {
+  @if $legacy_browser_support {
     _font-family: 'courier new', monospace;
   }
   font-size: 1em;
@@ -457,23 +378,12 @@ samp {
  * styling of `select`, unless a `border` property is set.
  */
 
-@if support-legacy-browser(ie, "7") {
-  /**
-   * Correct margin displayed oddly in IE 6/7.
-   */
-
-  form {
-    margin: 0;
-  }
-}
-
 /**
  * 1. Correct color not being inherited.
- *    Known issue: affects color of disabled elements.
+ *  Known issue: affects color of disabled elements.
  * 2. Correct font properties not being inherited.
  * 3. Address margins set differently in Firefox 4+, Safari, and Chrome.
- * 4. Address `font-family` inconsistency between `textarea` and other form in IE 7
- * 5. Improve appearance and consistency with IE 6/7.
+ * 4. Improves appearance and consistency in all browsers.
  */
 
 button,
@@ -484,9 +394,9 @@ textarea {
   color: inherit; /* 1 */
   font: inherit; /* 2 */
   margin: 0; /* 3 */
-  @if support-legacy-browser(ie, "7") {
-    *font-family: $base-font-family; /* 4 */
-    *vertical-align: middle; /* 5 */
+  @if $legacy_browser_support {
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
   }
 }
 
@@ -512,12 +422,12 @@ select {
 
 /**
  * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
- *    and `video` controls.
+ *  and `video` controls.
  * 2. Correct inability to style clickable `input` types in iOS.
  * 3. Improve usability and consistency of cursor style between image-type
- *    `input` and others.
- * 4. Remove inner spacing in IE 7 without affecting normal text inputs.
- *    Known issue: inner spacing remains in IE 6.
+ *  `input` and others.
+ * 4. Removes inner spacing in IE 7 without affecting normal text inputs.
+ *  Known issue: inner spacing remains in IE 6.
  */
 
 button,
@@ -526,8 +436,8 @@ input[type="reset"],
 input[type="submit"] {
   -webkit-appearance: button; /* 2 */
   cursor: pointer; /* 3 */
-  @if support-legacy-browser(ie, "7") {
-    *overflow: visible; /* 4 */
+  @if $legacy_browser_support {
+    *overflow: visible;  /* 4 */
   }
 }
 
@@ -559,25 +469,19 @@ input {
   line-height: normal;
 }
 
-@if support-legacy-browser(ie, "10") {
-  /**
-   * It's recommended that you don't attempt to style these elements.
-   * Firefox's implementation doesn't respect box-sizing, padding, or width.
-   *
-   * 1. Address box sizing set to `content-box` in IE 8/9/10.
-   * 2. Remove excess padding in IE 8/9/10.
-   * 3. Remove excess padding in IE 7.
-   *    Known issue: excess padding remains in IE 6.
-   */
+/**
+ * 1. Address box sizing set to `content-box` in IE 8/9/10.
+ * 2. Remove excess padding in IE 8/9/10.
+ *  Known issue: excess padding remains in IE 6.
+ */
 
-  input[type="checkbox"],
-  input[type="radio"] {
-    @include box-sizing(border-box); /* 1 */
-    padding: 0; /* 2 */
-    @if support-legacy-browser(ie, "7") {
-      *height: 13px; /* 3 */
-      *width: 13px; /* 3 */
-    }
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box; /* 1 */
+  padding: 0; /* 2 */
+  @if $legacy_browser_support {
+    *height: 13px; /* 3 */
+    *width: 13px; /* 3 */
   }
 }
 
@@ -594,24 +498,23 @@ input[type="number"]::-webkit-outer-spin-button {
 
 /**
  * 1. Address `appearance` set to `searchfield` in Safari and Chrome.
- * 2. Address `box-sizing` set to `border-box` in Safari and Chrome
- *    (include `-moz` to future-proof).
+ * 2. Address `box-sizing` set to `border-box` in Safari and Chrome.
  */
 
 input[type="search"] {
   -webkit-appearance: textfield; /* 1 */
-  @include box-sizing(content-box); /* 2 */
+  box-sizing: content-box; /* 2 */
+}
 
-  /**
-   * Remove inner padding and search cancel button in Safari and Chrome on OS X.
-   * Safari (but not Chrome) clips the cancel button when the search input has
-   * padding (and `textfield` appearance).
-   */
+/**
+ * Remove inner padding and search cancel button in Safari and Chrome on OS X.
+ * Safari (but not Chrome) clips the cancel button when the search input has
+ * padding (and `textfield` appearance).
+ */
 
-  &::-webkit-search-cancel-button,
-  &::-webkit-search-decoration {
-    -webkit-appearance: none;
-  }
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
 }
 
 /**
@@ -619,28 +522,24 @@ input[type="search"] {
  */
 
 fieldset {
+  border: 1px solid #c0c0c0;
   margin: 0 2px;
-  /* Apply borders and padding that keep the vertical rhythm. */
-  border-color: #c0c0c0;
-  @include apply-side-rhythm-border(top,    $width: 1px, $lines: 0.35 );
-  @include apply-side-rhythm-border(bottom, $width: 1px, $lines: 0.65 );
-  @include apply-side-rhythm-border(left,   $width: 1px, $lines: 0.625);
-  @include apply-side-rhythm-border(right,  $width: 1px, $lines: 0.625);
+  padding: 0.35em 0.625em 0.75em;
 }
 
 /**
  * 1. Correct `color` not being inherited in IE 8/9/10/11.
  * 2. Remove padding so people aren't caught out if they zero out fieldsets.
- * 3. Correct alignment displayed oddly in IE 6/7.
+ * 3. Corrects text not wrapping in Firefox 3.
+ * 4. Corrects alignment displayed oddly in IE 6/7.
  */
 
 legend {
-  @if support-legacy-browser(ie, "11") {
-    border: 0; /* 1 */
-  }
+  border: 0; /* 1 */
   padding: 0; /* 2 */
-  @if support-legacy-browser(ie, "7") {
-    *margin-left: -7px; /* 3 */
+  @if $legacy_browser_support {
+    white-space: normal; /* 3 */
+    *margin-left: -7px; /* 4 */
   }
 }
 

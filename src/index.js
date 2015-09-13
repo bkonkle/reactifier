@@ -19,7 +19,7 @@ export default function reactifier() {
   log.info('Retrieving subscriptions...');
 
   // First, retrieve a combined feed of all subscriptions
-  getSubscriptionFeed()
+  return getSubscriptionFeed()
 
     // Then, save the new posts to S3
     .then(function(feed) {

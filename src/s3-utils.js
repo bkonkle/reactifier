@@ -1,4 +1,7 @@
 import AWS from 'aws-sdk';
+import mime from 'mime-types';
+import path from 'path';
+import through from 'through2';
 
 export function getS3() {
   // Make sure the desired AWS credentials profile is used, even if the env var
@@ -27,5 +30,26 @@ export function callS3(s3, method, options) {
         resolve(response);
       }
     });
+  });
+}
+
+export function uploadToS3() {
+  const s3 = getS3();
+
+  return through.obj(function(file, enc, cb) {
+    // Find the relative path based on the current working directory
+    const dest = path.relative(process.cwd(), file.path);
+
+    // Upload the file to S3
+    callS3(s3, 'upload', {
+      Key: dest,
+      Body: file.contents,
+      ContentType: mime.lookup(file.path),
+    })
+
+      // Hit the callback when the upload is done
+      .then(function() {
+        cb(null, file);
+      });
   });
 }
