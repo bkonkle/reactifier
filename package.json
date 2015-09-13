@@ -4,11 +4,7 @@
   "description": "A blog post aggregator bringing together React developers from across the globe.",
   "main": "lib/index.js",
   "scripts": {
-    "clean": "rm -rf lib",
-    "test": "istanbul cover _mocha",
-    "build": "babel src --out-dir lib",
-    "watch": "npm run build -- --watch",
-    "prepublish": "npm run clean && npm run build"
+    "test": "istanbul cover _mocha"
   },
   "private": true,
   "repository": {
@@ -38,7 +34,8 @@
     "moment": "^2.10.6",
     "react": "^0.13.3",
     "request": "^2.61.0",
-    "string": "^3.3.1"
+    "string": "^3.3.1",
+    "susy": "^2.2.5"
   },
   "devDependencies": {
     "babel": "^5.8.23",
@@ -48,9 +45,14 @@
     "chai-as-promised": "^5.1.0",
     "eslint": "^1.3.1",
     "eslint-plugin-react": "^3.3.1",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.2.1",
+    "gulp-rimraf": "^0.1.1",
+    "gulp-spawn-mocha": "^2.2.1",
     "istanbul": "^0.3.19",
     "mocha": "^2.3.2",
     "nock": "^2.10.0",
-    "proxyquire": "^1.7.1"
+    "proxyquire": "^1.7.1",
+    "through2": "^2.0.0"
   }
 }

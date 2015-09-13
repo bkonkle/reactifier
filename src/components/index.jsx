@@ -8,7 +8,10 @@ export default class Index extends Component {
     return (
       <html>
         <head>
+          <meta charSet="utf-8"/>
           <title>Reactifier.</title>
+          <meta name="description" content="A blog post aggregator bringing together React developers from across the globe."/>
+          <meta name="viewport" content="width=device-width, initial-scale=1"/>
         </head>
         <body>
           <h1>Reactifier.</h1>

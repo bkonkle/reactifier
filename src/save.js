@@ -79,7 +79,7 @@ export function saveIndex(s3, index) {
 }
 
 export function toMarkdown(post) {
-  // Exclude the metadata when creatin ghte post metadata
+  // Exclude the description when creating the post metadata
   const metadata = yaml.safeDump(omit(post, 'description'));
   return `---\n${metadata}---\n${post.description}\n`;
 }

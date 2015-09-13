@@ -3,7 +3,9 @@ import AWS from 'aws-sdk';
 export function getS3() {
   // Make sure the desired AWS credentials profile is used, even if the env var
   // isn't available right away (such as when dotenv is used)
-  AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: process.env.AWS_PROFILE});
+  AWS.config.credentials = new AWS.SharedIniFileCredentials({
+    profile: process.env.AWS_PROFILE,
+  });
 
   return new AWS.S3({params: {Bucket: process.env.S3_BUCKET}});
 }
