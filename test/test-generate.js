@@ -31,7 +31,7 @@ describe('generate', function() {
         } else {
           // The second getObject call should be for the file itself, expecting
           // markdown content
-          callback(undefined, sampleMarkdown);
+          callback(undefined, {Body: sampleMarkdown});
         }
       };
 
@@ -52,7 +52,7 @@ describe('generate', function() {
           called = true;
 
           // Return the markdown from the file
-          callback(undefined, sampleMarkdown);
+          callback(undefined, {Body: sampleMarkdown});
         }
       };
 
@@ -68,7 +68,7 @@ describe('generate', function() {
           callback(undefined, {Body: JSON.stringify(sampleIndex)});
         } else {
           // Return the markdown from the file
-          callback(undefined, sampleMarkdown);
+          callback(undefined, {Body: sampleMarkdown});
         }
       };
 
