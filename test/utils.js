@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import md5 from 'md5';
 import nock from 'nock';
 
 export function getFacebookFeed() {
@@ -47,4 +48,27 @@ export function cleanUpNock() {
   after(function() {
     nock.restore();
   });
+}
+
+export function getMockS3() {
+  const sampleMarkdown = fs.readFileSync(path.join(__dirname, 'fixtures', 'sample-post.md')).toString();
+
+  const guid = 'https://facebook.github.io/react/blog/2015/09/02/new-react-developer-tools.html';
+
+  const sampleIndex = {};
+  sampleIndex[guid] = {
+    unixDate: 1441177200000,
+    path: `posts/${md5(guid)}.md`,
+  };
+
+  // Set up a reference to a mock S3 interface which can be implemented by each
+  // test as needed
+  let mockS3 = {};
+
+  afterEach(function() {
+    // Reset the mock
+    mockS3 = {};
+  });
+
+  return {sampleMarkdown, sampleIndex, mockS3};
 }

@@ -1,29 +1,14 @@
-import {expect} from 'chai';
+import {getMockS3} from './utils';
+import chai, {expect} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import md5 from 'md5';
-import path from 'path';
 import proxyquire from 'proxyquire';
-import fs from 'fs';
 import samplePost from './fixtures/sample-post';
 
+chai.use(chaiAsPromised);
+
 describe('save', function() {
-  const sampleMarkdown = fs.readFileSync(path.join(__dirname, 'fixtures', 'sample-post.md')).toString();
-
-  const guid = 'https://facebook.github.io/react/blog/2015/09/02/new-react-developer-tools.html';
-
-  const sampleIndex = {};
-  sampleIndex[guid] = {
-    unixDate: 1441177200000,
-    path: `posts/${md5(guid)}.md`,
-  };
-
-  // Set up a reference to a mock S3 interface which can be implemented by each
-  // test as needed
-  let mockS3 = {};
-
-  afterEach(function() {
-    // Reset the mock
-    mockS3 = {};
-  });
+  const {sampleMarkdown, sampleIndex, mockS3} = getMockS3();
 
   const {
     saveFeed,
@@ -33,11 +18,8 @@ describe('save', function() {
     toMarkdown,
     savePost,
   } = proxyquire('../src/save', {
-    'aws-sdk': {
-      S3: () => mockS3,
-      config: {},
-      SharedIniFileCredentials: () => null,
-      '@noCallThru': true,
+    './s3-utils': {
+      getS3: () => mockS3,
     },
   });
 
@@ -51,21 +33,29 @@ describe('save', function() {
     };
 
     it('calls s3.getObject to get the index', function() {
+      let called = false;
+
       mockS3.getObject = function(options, callback) {
+        called = true;
         expect(options.Key).to.equal('index.json');
         callback(undefined, {Body: JSON.stringify(sampleIndex)});
       };
 
-      return saveFeed([samplePost]);
+      return saveFeed([samplePost]).then(function() {
+        expect(called).to.be.true;
+      });
     });
 
     it('calls s3.upload for each new post', function() {
+      let called = false;
+
       mockS3.getObject = function(options, callback) {
         // Return an empty index
         callback(undefined, {Body: JSON.stringify({})});
       };
 
       mockS3.upload = function(options, callback) {
+        called = true;
         if (options.Key === 'index.json') {
           // Send a Location just so that we can check the result below
           callback(undefined, {Location: 'index.json'});
@@ -81,7 +71,11 @@ describe('save', function() {
       const result = saveFeed([samplePost]);
 
       // The result should be an array with the Location response
-      return expect(result).to.eventually.deep.equal([{Location: 'index.json'}]);
+      return expect(result).to.eventually.deep.equal([{Location: 'index.json'}])
+
+        .then(function() {
+          expect(called).to.be.true;
+        });
     });
 
     it('doesn\'t call s3.upload for posts that already exist in the index', function() {

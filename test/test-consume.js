@@ -3,9 +3,9 @@ import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import facebookPosts from './fixtures/facebook-posts';
 import konklePosts from './fixtures/konkle-posts';
+import proxyquire from 'proxyquire';
 import samplePost from './fixtures/sample-post';
 import subscriptions from './fixtures/subscriptions';
-import proxyquire from 'proxyquire';
 
 chai.use(chaiAsPromised);
 

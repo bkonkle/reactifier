@@ -1,6 +1,6 @@
 import {omit} from 'lodash';
-import AWS from 'aws-sdk';
 import createLogger from './create-logger';
+import {getS3, callS3} from './s3-utils';
 import md5 from 'md5';
 import moment from 'moment';
 import yaml from 'js-yaml';
@@ -8,11 +8,8 @@ import yaml from 'js-yaml';
 const log = createLogger('save');
 
 export function saveFeed(feed) {
-  // Make sure the desired AWS credentials profile is used, even if the env var
-  // isn't available right away (such as when dotenv is used)
-  AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: process.env.AWS_PROFILE});
-
-  const s3 = new AWS.S3({params: {Bucket: process.env.S3_BUCKET}});
+  // TODO: Simplify the structure of this function
+  const s3 = getS3();
 
   return getIndex(s3)
 
@@ -50,6 +47,7 @@ export function saveFeed(feed) {
 }
 
 export function getIndex(s3) {
+  // TODO: Use callS3() for this
   return new Promise(function(resolve, reject) {
     s3.getObject({Key: 'index.json'}, function(err, data) {
       if (err) {
@@ -80,17 +78,9 @@ export function addToIndex(index, post) {
 }
 
 export function saveIndex(s3, index) {
-  return new Promise(function(resolve, reject) {
-    s3.upload({
-      Key: 'index.json',
-      Body: JSON.stringify(index),
-    }, function(err, response) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(response);
-      }
-    });
+  return callS3(s3, 'upload', {
+    Key: 'index.json',
+    Body: JSON.stringify(index),
   });
 }
 
@@ -101,16 +91,8 @@ export function toMarkdown(post) {
 }
 
 export function savePost(s3, post) {
-  return new Promise(function(resolve, reject) {
-    s3.upload({
-      Key: `posts/${md5(post.guid)}.md`,
-      Body: toMarkdown(post),
-    }, function(err, response) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(response);
-      }
-    });
+  return callS3(s3, 'upload', {
+    Key: `posts/${md5(post.guid)}.md`,
+    Body: toMarkdown(post),
   });
 }
