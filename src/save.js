@@ -8,41 +8,35 @@ import yaml from 'js-yaml';
 const log = createLogger('save');
 
 export function saveFeed(feed) {
-  // TODO: Simplify the structure of this function
   const s3 = getS3();
 
   return getIndex(s3)
 
-    // When the index is retrieved, it's time to begin saving new posts
     .then(function(index) {
-      const promises = [];
+      // Filter the posts to just those that are new
+      const newPosts = feed.filter(post => !index.hasOwnProperty(post.guid));
 
-      feed.forEach(function(post) {
-        if (!index.hasOwnProperty(post.guid)) {
-          // If the post is not yet in the index, save it and add it to the index
-          const promise = savePost(s3, post)
-
-            .then(function() {
-              // Now that the post is saved, add it to the index
-              const newIndex = addToIndex(index, post);
-
-              // Return the promise from saveIndex
-              return saveIndex(s3, newIndex).then(value => {
-                return value;
-              });
-            })
-
-            .catch(function(err) {
-              log.error(err);
-            });
-
-          // Add the promise to the array of promises to wait for
-          promises.push(promise);
-        }
-      });
+      // Begin the save operation for each post, resulting in a promise array
+      const promises = newPosts.map(post => savePost(s3, post));
 
       // Return a promise that resolves when all of the posts have been saved
-      return Promise.all(promises);
+      return Promise.all(promises)
+
+        // Now add each new post to the index
+        .then(function() {
+          return newPosts.reduce(function(index, post) {
+            return addToIndex(index, post);
+          }, index);
+        })
+
+        // Save the new index
+        .then(function(newIndex) {
+          return saveIndex(s3, newIndex);
+        });
+    })
+
+    .catch(function(err) {
+      log.error(err);
     });
 }
 

@@ -71,7 +71,7 @@ describe('save', function() {
       const result = saveFeed([samplePost]);
 
       // The result should be an array with the Location response
-      return expect(result).to.eventually.deep.equal([{Location: 'index.json'}])
+      return expect(result).to.eventually.deep.equal({Location: 'index.json'})
 
         .then(function() {
           expect(called).to.be.true;
@@ -108,7 +108,7 @@ describe('save', function() {
       const result = saveFeed([samplePost, newPost]);
 
       // The result should be an array with the Location response
-      return expect(result).to.eventually.deep.equal([{Location: 'index.json'}]);
+      return expect(result).to.eventually.deep.equal({Location: 'index.json'});
     });
 
     it('saves the new index', function() {
@@ -142,7 +142,7 @@ describe('save', function() {
       const result = saveFeed([samplePost]);
 
       // The result should be an array with the Location response
-      return expect(result).to.eventually.deep.equal([{Location: 'index.json'}]);
+      return expect(result).to.eventually.deep.equal({Location: 'index.json'});
     });
 
   });
