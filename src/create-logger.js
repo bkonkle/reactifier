@@ -5,19 +5,20 @@ import chalk from 'chalk';
 // Create a stream to format the string and call console commands
 function PlainStream() {}
 PlainStream.prototype.write = function(rec) {
-  let record = rec.msg;
+  let message = rec.msg;
 
   if (rec.level < bunyan.INFO) {
-    console.log(record);
+    console.log(message);
   } else if (rec.level < bunyan.WARN) {
-    console.info(record);
+    console.info(message);
   } else if (rec.level < bunyan.ERROR) {
-    console.warn(record);
+    console.warn(message);
   } else {
-    if (typeof record === 'string') {
-      record = chalk.red(record);
+    if (rec.err && rec.err.stack) {
+      console.error(rec.err.stack);
+    } else {
+      console.log(chalk.red(message));
     }
-    console.error(record);
   }
 };
 

@@ -2,9 +2,13 @@
   "name": "reactifier",
   "version": "0.1.0",
   "description": "A blog post aggregator bringing together React developers from across the globe.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "istanbul cover _mocha"
+    "clean": "rm -rf lib",
+    "test": "istanbul cover _mocha",
+    "build": "babel src --out-dir lib",
+    "watch": "npm run build -- --watch",
+    "prepublish": "npm run clean && npm run build"
   },
   "private": true,
   "repository": {
@@ -37,6 +41,7 @@
     "string": "^3.3.1"
   },
   "devDependencies": {
+    "babel": "^5.8.23",
     "babel-eslint": "^4.1.1",
     "babel-plugin-object-assign": "^1.2.1",
     "chai": "^3.2.0",

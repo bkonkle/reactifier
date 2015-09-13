@@ -1,8 +1,11 @@
 import {getIndex} from './save';
 import {getS3, callS3} from './s3-utils';
 import {renderToStaticMarkup, createElement} from 'react';
+import createLogger from './create-logger';
 import frontMatter from 'front-matter';
 import Index from './components/index';
+
+const log = createLogger('generate');
 
 export function generateSite() {
   const s3 = getS3();
@@ -20,11 +23,21 @@ export function generateSite() {
 
     // Map each post to the frontMatter reader to create a context
     .then(function(posts) {
-      return posts.map(frontMatter);
+      return posts
+
+        // Pull the body from each post
+        .map(file => file.Body.toString())
+
+        // Convert the posts to structured data with front-matter
+        .map(frontMatter);
     })
 
     // Render the index component with the context
-    .then(renderIndex);
+    .then(renderIndex)
+
+    .catch(function(err) {
+      log.error(err);
+    });
 }
 
 export function renderIndex(posts) {

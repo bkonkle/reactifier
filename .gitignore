@@ -10,7 +10,10 @@ pids
 # Coverage directory used by tools like istanbul
 coverage
 
-# The build folder for the static site
+# The lib folder for transpiled es6
+lib
+
+# The build folder for the AWS Lambda build
 build
 
 # Dependency directory
