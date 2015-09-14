@@ -1,0 +1,25 @@
+/* Webfont: Overpass-Bold */
+@font-face {
+    font-family: 'Overpass';
+    src: url('../fonts/Overpass-Bold.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/Overpass-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/Overpass-Bold.woff') format('woff'), /* Modern Browsers */
+         url('../fonts/Overpass-Bold.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/Overpass-Bold.svg#Overpass-Bold') format('svg'); /* Legacy iOS */
+    font-style: normal;
+    font-weight: bold;
+    text-rendering: optimizeLegibility;
+}
+
+/* Webfont: Overpass-Reg */
+@font-face {
+    font-family: 'Overpass';
+    src: url('../fonts/Overpass-Reg.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/Overpass-Reg.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/Overpass-Reg.woff') format('woff'), /* Modern Browsers */
+         url('../fonts/Overpass-Reg.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/Overpass-Reg.svg#Overpass-Reg') format('svg'); /* Legacy iOS */
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}

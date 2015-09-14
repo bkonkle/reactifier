@@ -1,11 +1,14 @@
 @import "normalize";
-@import "../fonts/Overpass-Bold";
+@import "overpass";
+
+body {
+  font-family: 'Overpass', sans-serif;
+  color: #444;
+}
 
 .title {
-  font-family: 'Overpass', sans-serif;
   font-weight: bold;
   font-size: 4em;
-  color: #444;
   text-align: center;
 
   strong {
