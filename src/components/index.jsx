@@ -12,6 +12,7 @@ export default class Index extends Component {
   };
 
   render() {
+
     return (
       <html>
         <Head/>
@@ -21,7 +22,7 @@ export default class Index extends Component {
             <p>A blog post aggregator bringing together React developers from across the globe.</p>
           </section>
           <main id="posts">
-            {this.props.posts.map(post => <Article {...post}/>)}
+            {this.props.posts.map(post => <Article key={post.attributes.guid} {...post}/>)}
           </main>
           <Footer/>
         </body>
