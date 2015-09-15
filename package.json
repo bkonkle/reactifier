@@ -5,7 +5,8 @@
   "description": "A blog post aggregator bringing together React developers from across the globe.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "istanbul cover _mocha"
+    "test": "istanbul cover _mocha",
+    "deploy": "babel-node $(which gulp) build run"
   },
   "private": true,
   "repository": {

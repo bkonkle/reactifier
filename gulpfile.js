@@ -12,7 +12,7 @@ gulp.task('default', ['build', 'run']);
 
 gulp.task('build', ['build:lib', 'build:media', 'build:sass']);
 
-gulp.task('run', function() {
+gulp.task('run', ['build:lib'], function() {
   // The reactifier function returns a promise, which we can pass to gulp
   return reactifier();
 });
