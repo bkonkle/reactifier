@@ -13,13 +13,27 @@ export function saveFeed(feed) {
   return getIndex(s3)
 
     .then(function(index) {
-      // Filter the posts to just those that are new
-      const newPosts = feed.filter(post => !index.hasOwnProperty(post.guid));
+      // Pull the latest 30 items from the feed, and save the rest for cleanup
+      const newPosts = feed.slice(0, 30)
+
+        // Filter to just those that haven't already been saved to S3
+        .filter(post => !index.hasOwnProperty(post.guid));
+
+      const oldPosts = feed.slice(30);
 
       // Begin the save operation for each post, resulting in a promise array
-      const promises = newPosts.map(post => savePost(s3, post));
+      let promises = newPosts.map(post => savePost(s3, post));
 
-      // Return a promise that resolves when all of the posts have been saved
+      // Clean up the old posts, and add the promises to the list
+      promises = promises.concat(oldPosts.reduce(function(currentValue, post) {
+        if (index.hasOwnProperty(post.guid)) {
+          return currentValue.concat([removePost(s3, post)]);
+        } else {
+          return currentValue;
+        }
+      }, []));
+
+      // Return a promise that resolves when all posts have been processed
       return Promise.all(promises)
 
         // Now add each new post to the index
@@ -88,5 +102,11 @@ export function savePost(s3, post) {
   return callS3(s3, 'upload', {
     Key: `posts/${md5(post.guid)}.md`,
     Body: toMarkdown(post),
+  });
+}
+
+export function removePost(s3, post) {
+  return callS3(s3, 'deleteObject', {
+    Key: `posts/${md5(post.guid)}.md`,
   });
 }

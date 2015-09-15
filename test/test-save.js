@@ -116,6 +116,10 @@ describe('save', function() {
       return expect(result).to.eventually.deep.equal({Location: 'posts/index.json'});
     });
 
+    it('only saves the latest 30 posts');
+
+    it('cleans up posts that aren\'t included in the latest 30');
+
     it('saves the new index', function() {
       const existingIndex = {
         'testGuid': {
@@ -249,6 +253,12 @@ describe('save', function() {
 
       return expect(promise).to.eventually.equal(response);
     });
+
+  });
+
+  describe('removePost()', function() {
+
+    it('removes a given post from S3');
 
   });
 
