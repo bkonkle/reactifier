@@ -6,6 +6,14 @@ body {
   color: #444;
 }
 
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .title {
   font-weight: bold;
   font-size: 4em;
@@ -14,5 +22,85 @@ body {
   strong {
     font-size: 6rem;
     color: #61dafb;
+  }
+}
+
+#description {
+  text-align: center;
+}
+
+article {
+  max-width: 45em;
+  margin: 4em auto;
+
+  a {
+    color: #444;
+
+    &:hover {
+      color: #222;
+    }
+  }
+
+  p {
+    margin-top: 0.5em;
+  }
+
+  h2 {
+    font-size: 2em;
+    margin-bottom: 0;
+
+    a:hover {
+      text-decoration: none;
+    }
+  }
+
+  footer {
+    color: #999;
+
+    a {
+      color: #999;
+    }
+
+    time {
+      border-left: #999 1px solid;
+      margin-left: 0.5em;
+      padding-left: 0.5em;
+    }
+  }
+
+  a.read-more {
+    color: #61dafb;
+    font-size: 0.8em;
+    vertical-align: text-bottom;
+
+    &:hover {
+      color: #61dafb;
+    }
+  }
+}
+
+#site-footer {
+  color: #999;
+  font-size: 0.7em;
+  margin: 2em;
+
+  a {
+    color: #999;
+    font-weight: bold;
+  }
+
+  .copyright {
+    float: left;
+  }
+
+  .github {
+    float: right;
+    text-align: right;
+
+    .logo {
+      width: 1.8em;
+      height: 1.8em;
+      margin-left: 1em;
+    }
   }
 }
