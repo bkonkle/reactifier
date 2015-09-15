@@ -4,6 +4,9 @@ import {renderToStaticMarkup, createElement} from 'react';
 import createLogger from './create-logger';
 import frontMatter from 'front-matter';
 import Index from './components/index';
+import moment from 'moment';
+import pkg from '../package';
+import RSS from 'rss';
 
 const log = createLogger('generate');
 
@@ -23,17 +26,18 @@ export function generateSite() {
 
     // Map each post to the frontMatter reader to create a context
     .then(function(posts) {
-      return posts
-
-        // Pull the body from each post
-        .map(file => file.Body.toString())
+      // Pull the body from each post
+      const postData = posts.map(file => file.Body.toString())
 
         // Convert the posts to structured data with front-matter
         .map(frontMatter);
-    })
 
-    // Render the index component with the context
-    .then(renderIndex)
+      // Render the index component and the rss feed with the context
+      const index = renderIndex(postData);
+      const feed = renderFeed(postData);
+
+      return {index, feed};
+    })
 
     .catch(function(err) {
       log.error(err);
@@ -42,4 +46,36 @@ export function generateSite() {
 
 export function renderIndex(posts) {
   return renderToStaticMarkup(createElement(Index, {posts}));
+}
+
+export function renderFeed(posts) {
+  const feed = new RSS({
+    title: pkg.title,
+    description: pkg.description,
+    /* eslint-disable camelcase */
+    feed_url: 'http://reactifier.com/rss.xml',
+    site_url: 'http://reactifier.com',
+    /* eslint-enable camelcase */
+    language: 'en',
+    categories: ['React', 'React.js', 'JavaScript', 'Node'],
+    pubDate: moment().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+    ttl: '60',
+  });
+
+  posts.forEach(function(post) {
+    const {attributes, body} = post;
+    const {author, guid, link, pubDate, subscription, title} = attributes;
+
+    feed.item({
+      title,
+      description: body,
+      url: link,
+      guid,
+      categories: ['React', 'React.js', 'JavaScript', 'Node'],
+      author: author || (subscription && subscription.title),
+      date: moment(pubDate).format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+    });
+  });
+
+  return feed.xml({indent: true});
 }

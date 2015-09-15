@@ -1,4 +1,4 @@
-import {getMockS3} from './utils';
+import {getMockS3, getSampleFeed} from './utils';
 import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import md5 from 'md5';
@@ -10,9 +10,12 @@ chai.use(chaiAsPromised);
 
 describe('generate', function() {
 
-  const {sampleIndex, sampleMarkdown, mockS3} = getMockS3();
+  const expectedHtml = '<html><body>New React Developer Tools</body></html>';
 
-  const {generateSite, renderIndex} = proxyquire('../src/generate', {
+  const {sampleIndex, sampleMarkdown, mockS3} = getMockS3();
+  const {sampleFeed, sampleFeedXml} = getSampleFeed();
+
+  const {generateSite, renderIndex, renderFeed} = proxyquire('../src/generate', {
     './s3-utils': {getS3: () => mockS3},
     './components/index': MockIndex,
   });
@@ -72,7 +75,9 @@ describe('generate', function() {
         }
       };
 
-      expect(generateSite()).to.eventually.equal('<html><body>New React Developer Tools</body></html>');
+      const result = generateSite();
+
+      return expect(result).to.eventually.have.property('index', expectedHtml);
     });
 
   });
@@ -87,7 +92,23 @@ describe('generate', function() {
         body: '',
       }]);
 
-      expect(result).to.equal('<html><body>New React Developer Tools</body></html>');
+      expect(result).to.equal(expectedHtml);
+    });
+
+  });
+
+  describe('renderFeed()', function() {
+
+    it('takes a collection of post data and uses it to render the rss feed', function() {
+      const result = renderFeed(sampleFeed);
+
+      const expectedResult = result
+
+        // Fix the feed date because moment() returns the time now
+        .replace(/<lastBuildDate>.*<\/lastBuildDate>/g, '<lastBuildDate>Tue, 15 Sep 2015 22:45:00 GMT</lastBuildDate>')
+        .replace(/<pubDate>.*<\/pubDate>\n        <language>/g, '<pubDate>Tue, 15 Sep 2015 22:45:00 GMT</pubDate>\n        <language>');
+
+      expect(expectedResult).to.equal(sampleFeedXml);
     });
 
   });

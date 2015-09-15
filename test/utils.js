@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import md5 from 'md5';
 import nock from 'nock';
+import sampleFeed from './fixtures/sample-feed';
 
 export function getFacebookFeed() {
   // Set up a nock request/response mock
@@ -71,4 +72,9 @@ export function getMockS3() {
   });
 
   return {sampleMarkdown, sampleIndex, mockS3};
+}
+
+export function getSampleFeed() {
+  const sampleFeedXml = fs.readFileSync(path.join(__dirname, 'fixtures', 'sample-feed.xml')).toString();
+  return {sampleFeed, sampleFeedXml};
 }

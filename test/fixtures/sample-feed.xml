@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title><![CDATA[Reactifier.]]></title>
+        <description><![CDATA[A blog post aggregator bringing together React developers from across the globe.]]></description>
+        <link>http://reactifier.com</link>
+        <generator>RSS for Node</generator>
+        <lastBuildDate>Tue, 15 Sep 2015 22:45:00 GMT</lastBuildDate>
+        <atom:link href="http://reactifier.com/rss.xml" rel="self" type="application/rss+xml"/>
+        <pubDate>Tue, 15 Sep 2015 22:45:00 GMT</pubDate>
+        <language><![CDATA[en]]></language>
+        <ttl>60</ttl>
+        <category><![CDATA[React]]></category>
+        <category><![CDATA[React.js]]></category>
+        <category><![CDATA[JavaScript]]></category>
+        <category><![CDATA[Node]]></category>
+        <item>
+            <title><![CDATA[New React Developer Tools]]></title>
+            <description><![CDATA[A month ago, we posted a beta of the new React developer tools. Today, we&#39;re releasing the first stable version of the new devtools. We&#39;re calling it version 0.14, but it&#39;s a full rewrite so we think of it more like a 2.0 release.
+
+
+
+It contains a handful of new features, including:
+
+
+Built entirely with React, making it easier to develop and extend
+Firefox support
+Selected component instance is available as $r from the console
+More detail is shown in props in the component tree...]]></description>
+            <link>https://facebook.github.io/react/blog/2015/09/02/new-react-developer-tools.html</link>
+            <guid isPermaLink="false">https://facebook.github.io/react/blog/2015/09/02/new-react-developer-tools.html</guid>
+            <category><![CDATA[React]]></category>
+            <category><![CDATA[React.js]]></category>
+            <category><![CDATA[JavaScript]]></category>
+            <category><![CDATA[Node]]></category>
+            <dc:creator><![CDATA[Official React Blog]]></dc:creator>
+            <pubDate>Wed, 02 Sep 2015 07:00:00 GMT</pubDate>
+        </item>
+    </channel>
+</rss>

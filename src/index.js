@@ -33,17 +33,26 @@ export default function reactifier() {
       return generateSite();
     })
 
-    // Finally, save the site to S3
-    .then(function(body) {
+    // Finally, save the index and feed to S3
+    .then(function(site) {
       log.info('Uploading the site to S3...');
 
-      const html = `<!doctype html>${body}`;
+      const s3 = getS3();
 
-      return callS3(getS3(), 'upload', {
+      const indexPromise = callS3(s3, 'upload', {
         Key: 'index.html',
-        Body: html,
+        Body: `<!doctype html>${site.index}`,
         ContentType: 'text/html',
       });
+
+      const feedPromise = callS3(s3, 'upload', {
+        Key: 'rss.xml',
+        Body: site.feed,
+        ContentType: 'application/rss+xml',
+      });
+
+      // Return a promise that resolves when both have been uploaded
+      return Promise.all([indexPromise, feedPromise]);
     })
 
     // Report success
