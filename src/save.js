@@ -43,6 +43,13 @@ export function saveFeed(feed) {
           }, index);
         })
 
+        // Remove old posts from the index
+        .then(function(newIndex) {
+          return oldPosts.reduce(function(index, post) {
+            return omit(newIndex, post.guid);
+          }, index);
+        })
+
         // Save the new index
         .then(function(newIndex) {
           return saveIndex(s3, newIndex);

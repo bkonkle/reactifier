@@ -6,6 +6,12 @@
     "feedLink": "https://facebook.github.io/react/feed.xml"
   },
   {
+    "title": "Medium",
+    "description": "React blog posts on Medium",
+    "link": "https://medium.com/tag/react",
+    "feedLink": "https://medium.com/feed/tag/react"
+  },
+  {
     "title": "Brandon Konkle's Blog",
     "description": "React posts by Brandon Konkle",
     "link": "http://konkle.us/tag/react/",
