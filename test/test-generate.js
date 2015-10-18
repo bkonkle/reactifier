@@ -108,6 +108,9 @@ describe('generate', () => {
         .replace(/<lastBuildDate>.*<\/lastBuildDate>/g, '<lastBuildDate>Tue, 15 Sep 2015 22:45:00 GMT</lastBuildDate>')
         .replace(/<pubDate>.*<\/pubDate>\n {8}<language>/g, '<pubDate>Tue, 15 Sep 2015 22:45:00 GMT</pubDate>\n        <language>')
 
+        // Add a newline at the end so it matches the sample xml
+        + '\n'
+
       expect(expectedResult).to.equal(sampleFeedXml)
     })
 
