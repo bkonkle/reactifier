@@ -4,6 +4,7 @@
 body {
   font-family: 'Overpass', sans-serif;
   color: #444;
+  margin: 1em;
 }
 
 a {
@@ -27,6 +28,18 @@ a {
 
 #description {
   text-align: center;
+
+  p {
+    margin: 0 auto;
+    max-width: 45em;
+  }
+}
+
+#posts {
+  -webkit-column-width: 45em;
+  -moz-column-width: 45em;
+  column-width: 45em;
+  margin-top: 1em;
 }
 
 article {

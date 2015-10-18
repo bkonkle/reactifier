@@ -12,7 +12,7 @@ export default class Footer extends Component {
           <a href="http://github.com/bkonkle/reactifier">
             <img alt="Github stars"
               className="stars"
-              src="https://img.shields.io/github/stars/bkonkle/reactifier.svg"/>
+              src="https://img.shields.io/github/stars/bkonkle/reactifier.svg?style=flat-square"/>
             <img alt="Find the source code on Github"
               className="logo"
               src="/media/images/mark-github.svg"/>
