@@ -2,19 +2,67 @@
   {
     "title": "the Official React Blog",
     "description": "Facebook's official React Blog feed",
-    "link": "http://facebook.github.io/react/blog/",
-    "feedLink": "https://facebook.github.io/react/feed.xml"
-  },
-  {
-    "title": "Medium",
-    "description": "React blog posts on Medium",
-    "link": "https://medium.com/tag/react",
-    "feedLink": "https://medium.com/feed/tag/react"
+    "feedLink": "https://facebook.github.io/react/feed.xml",
+    "link": "http://facebook.github.io/react/blog/"
   },
   {
     "title": "Brandon Konkle's Blog",
     "description": "React posts by Brandon Konkle",
-    "link": "http://konkle.us/tag/react/",
-    "feedLink": "http://konkle.us/tag/react/rss"
+    "feedLink": "http://konkle.us/tag/react/rss",
+    "link": "http://konkle.us/tag/react/"
+  },
+  {
+    "title": "ReactJS News",
+    "description": "Collected news and articles about React",
+    "feedLink": "https://reactjsnews.com/feed.xml",
+    "link": "https://reactjsnews.com/"
+  },
+  {
+    "title": "Dan Abramov on Medium",
+    "description": "Medium.com posts by Dan Abramov",
+    "feedLink": "https://medium.com/feed/@dan_abramov",
+    "link": "https://medium.com/@dan_abramov"
+  },
+  {
+    "title": "Vjeux's Blog",
+    "description": "Blog posts by Christopher Chedeau",
+    "feedLink": "http://blog.vjeux.com/feed",
+    "link": "http://blog.vjeux.com"
+  },
+  {
+    "title": "dosync (@swanodette)",
+    "description": "Blog posts by David Nolan",
+    "feedLink": "http://swannodette.github.io/atom.xml",
+    "link": "http://swannodette.github.io"
+  },
+  {
+    "title": "Abstractivate (@jessitron)",
+    "description": "Blog posts by Jessica Kerr",
+    "feedLink": "http://blog.jessitron.com/feeds/posts/default",
+    "link": "http://blog.jessitron.com"
+  },
+  {
+    "title": "Faassen's Blog",
+    "description": "Blog posts by Martijn Faassen",
+    "feedLink": "http://blog.startifact.com/rss.xml",
+    "link": "http://blog.startifact.com"
+  },
+  {
+    "title": "Knowbody on Medium",
+    "description": "Medium.com posts by Mateusz Zatorski",
+    "feedLink": "https://medium.com/feed/@knowbody",
+    "link": "https://medium.com/@knowbody"
+  },
+  {
+    "title": "Matt Zabriskie's Blog",
+    "description": "Blog posts by Matt Zabriskie",
+    "feedLink": "http://www.mattzabriskie.com/feed",
+    "link": "http://www.mattzabriskie.com"
+  },
+  {
+    "title": "Iammerrick's Blog",
+    "description": "Blog posts by Merrick Christensen",
+    "feedLink": "http://www.merrickchristensen.com/atom.xml",
+    "link": "http://www.merrickchristensen.com"
   }
 ]

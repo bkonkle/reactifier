@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 
 export default class Head extends Component {
 
@@ -9,12 +9,12 @@ export default class Head extends Component {
       <head>
         <meta charSet="utf-8"/>
         <title>Reactifier.</title>
-        <meta name="description" content="A blog post aggregator bringing together React developers from across the globe."/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link rel="stylesheet" href="media/css/style.css"/>
-        <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="http://reactifier.com/rss.xml"/>
+        <meta content="A blog post aggregator bringing together React developers from across the globe." name="description"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <link href="media/css/style.css" rel="stylesheet"/>
+        <link href="http://reactifier.com/rss.xml" rel="alternate" title="RSS Feed" type="application/rss+xml"/>
       </head>
-    );
+    )
   }
 
 }

@@ -1,16 +1,16 @@
-import AWS from 'aws-sdk';
-import mime from 'mime-types';
-import path from 'path';
-import through from 'through2';
+import AWS from 'aws-sdk'
+import mime from 'mime-types'
+import path from 'path'
+import through from 'through2'
 
 export function getS3() {
   // Make sure the desired AWS credentials profile is used, even if the env var
   // isn't available right away (such as when dotenv is used)
   AWS.config.credentials = new AWS.SharedIniFileCredentials({
     profile: process.env.AWS_PROFILE,
-  });
+  })
 
-  return new AWS.S3({params: {Bucket: process.env.S3_BUCKET}});
+  return new AWS.S3({params: {Bucket: process.env.S3_BUCKET}})
 }
 
 /**
@@ -22,23 +22,23 @@ export function getS3() {
  * @returns {Promise}
  */
 export function callS3(s3, method, options) {
-  return new Promise(function(resolve, reject) {
-    s3[method](options, function(err, response) {
+  return new Promise((resolve, reject) => {
+    s3[method](options, (err, response) => {
       if (err) {
-        reject(err);
+        reject(err)
       } else {
-        resolve(response);
+        resolve(response)
       }
-    });
-  });
+    })
+  })
 }
 
 export function uploadToS3() {
-  const s3 = getS3();
+  const s3 = getS3()
 
-  return through.obj(function(file, enc, cb) {
+  return through.obj((file, enc, cb) => {
     // Find the relative path based on the current working directory
-    const dest = path.relative(process.cwd(), file.path);
+    const dest = path.relative(process.cwd(), file.path)
 
     // Upload the file to S3
     callS3(s3, 'upload', {
@@ -48,8 +48,8 @@ export function uploadToS3() {
     })
 
       // Hit the callback when the upload is done
-      .then(function() {
-        cb(null, file);
-      });
-  });
+      .then(() => {
+        cb(null, file)
+      })
+  })
 }

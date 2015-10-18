@@ -1,6 +1,6 @@
-import he from 'he';
-import moment from 'moment';
-import React, {Component, PropTypes} from 'react';
+import he from 'he'
+import moment from 'moment'
+import React, {Component, PropTypes} from 'react'
 
 export default class Article extends Component {
 
@@ -24,9 +24,9 @@ export default class Article extends Component {
   };
 
   render() {
-    const {attributes, body} = this.props;
-    const {author, link, pubDate, subscription, title} = attributes;
-    const date = moment(pubDate);
+    const {attributes, body} = this.props
+    const {author, link, pubDate, subscription, title} = attributes
+    const date = moment(pubDate)
 
     return (
       <article>
@@ -44,7 +44,7 @@ export default class Article extends Component {
           </time>
         </footer>
       </article>
-    );
+    )
   }
 
 }

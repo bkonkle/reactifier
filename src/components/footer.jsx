@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 
 export default class Footer extends Component {
 
@@ -10,16 +10,16 @@ export default class Footer extends Component {
         <section className="copyright"><a href="http://konkle.us">Brandon Konkle</a> © 2015</section>
         <section className="github">
           <a href="http://github.com/bkonkle/reactifier">
-            <img src="https://img.shields.io/github/stars/bkonkle/reactifier.svg"
-              alt="Github stars"
-              className="stars"/>
-            <img src="/media/images/mark-github.svg"
-              alt="Find the source code on Github"
-              className="logo"/>
+            <img alt="Github stars"
+              className="stars"
+              src="https://img.shields.io/github/stars/bkonkle/reactifier.svg"/>
+            <img alt="Find the source code on Github"
+              className="logo"
+              src="/media/images/mark-github.svg"/>
           </a>
         </section>
       </footer>
-    );
+    )
   }
 
 }

@@ -1,11 +1,11 @@
-import React, {Component, PropTypes} from 'react';
-import Article from './article';
-import Footer from './footer';
-import Head from './head';
+import React, {Component, PropTypes} from 'react'
+import Article from './article'
+import Footer from './footer'
+import Head from './head'
 
 export default class Index extends Component {
 
-  static displayName = 'Index';
+  static displayName = 'Index'
 
   static propTypes = {
     posts: PropTypes.array.isRequired,
@@ -27,7 +27,7 @@ export default class Index extends Component {
           <Footer/>
         </body>
       </html>
-    );
+    )
   }
 
 }

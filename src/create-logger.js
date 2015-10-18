@@ -1,26 +1,26 @@
 /* eslint no-console:0 */
-import bunyan from 'bunyan';
-import chalk from 'chalk';
+import bunyan from 'bunyan'
+import chalk from 'chalk'
 
 // Create a stream to format the string and call console commands
 function PlainStream() {}
-PlainStream.prototype.write = function(rec) {
-  let message = rec.msg;
+PlainStream.prototype.write = rec => {
+  const message = rec.msg
 
   if (rec.level < bunyan.INFO) {
-    console.log(message);
+    console.log(message)
   } else if (rec.level < bunyan.WARN) {
-    console.info(message);
+    console.info(message)
   } else if (rec.level < bunyan.ERROR) {
-    console.warn(message);
+    console.warn(message)
   } else {
     if (rec.err && rec.err.stack) {
-      console.error(rec.err.stack);
+      console.error(rec.err.stack)
     } else {
-      console.log(chalk.red(message));
+      console.log(chalk.red(message))
     }
   }
-};
+}
 
 /**
  * Create a logger with the given name.
@@ -32,9 +32,9 @@ PlainStream.prototype.write = function(rec) {
  */
 export default function createLogger(name, level) {
   // Adjust the loglevel based on the environment variable
-  const loglevel = process.env.LOGLEVEL || 'info';
+  const loglevel = process.env.LOGLEVEL || 'info'
 
-  let settings = {
+  const settings = {
     name: name,
     streams: [
       {
@@ -43,7 +43,7 @@ export default function createLogger(name, level) {
         stream: new PlainStream(),
       },
     ],
-  };
+  }
 
-  return bunyan.createLogger(settings);
+  return bunyan.createLogger(settings)
 }
