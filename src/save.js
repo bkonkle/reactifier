@@ -38,16 +38,16 @@ export function saveFeed(feed) {
 
         // Now add each new post to the index
         .then(() => {
-          return newPosts.reduce((idx, post) => {
-            return addToIndex(idx, post)
+          return newPosts.reduce((indexMemo, post) => {
+            return addToIndex(indexMemo, post)
           }, index)
         })
 
         // Remove old posts from the index
         .then(newIndex => {
-          return oldPosts.reduce((idx, post) => {
-            return omit(newIndex, post.guid)
-          }, index)
+          return oldPosts.reduce((indexMemo, post) => {
+            return omit(indexMemo, post.guid)
+          }, newIndex)
         })
 
         // Save the new index
