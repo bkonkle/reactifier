@@ -1,24 +1,15 @@
 import {getFacebookFeed, getKonkleFeed, cleanUpNock} from './utils'
+import {getSubscriptionFeed, requestPosts, transformPost, combineFeeds} from '../src/consume'
 import chai, {expect} from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import facebookPosts from './fixtures/facebook-posts'
 import konklePosts from './fixtures/konkle-posts'
-import proxyquire from 'proxyquire'
 import samplePost from './fixtures/sample-post'
 import subscriptions from './fixtures/subscriptions'
 
 chai.use(chaiAsPromised)
 
 describe('consume', () => {
-
-  const {
-    getSubscriptionFeed,
-    requestPosts,
-    transformPost,
-    combineFeeds,
-  } = proxyquire('../src/consume', {
-    '../subscriptions': subscriptions,
-  })
 
   const facebookFeed = getFacebookFeed()
   getKonkleFeed()
@@ -28,7 +19,7 @@ describe('consume', () => {
   describe('getSubscriptionFeed()', () => {
 
     it('retrieves each subscribed feed and returns an array of normalized posts', () => {
-      const promise = getSubscriptionFeed()
+      const promise = getSubscriptionFeed(subscriptions)
       return expect(promise).to.eventually.have.length(13)
     })
 

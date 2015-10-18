@@ -5,9 +5,9 @@ import request from 'request'
 import string from 'string'
 import subscriptions from '../subscriptions'
 
-export function getSubscriptionFeed() {
+export function getSubscriptionFeed(subs = subscriptions) {
   // For each feed, request the posts
-  const feeds = subscriptions.map(subscription => {
+  const feeds = subs.map(subscription => {
     return requestPosts(subscription)
 
       // Transform each post to include just the data we need
