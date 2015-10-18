@@ -80,6 +80,8 @@ describe('generate', () => {
       return expect(result).to.eventually.have.property('index', expectedHtml)
     })
 
+    it('removes missing files from the index')
+
   })
 
   describe('renderIndex()', () => {
