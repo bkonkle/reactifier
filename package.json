@@ -1,6 +1,6 @@
 {
   "name": "reactifier",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "title": "Reactifier.",
   "description": "A blog post aggregator bringing together React developers from across the globe.",
   "main": "lib/index.js",
@@ -40,7 +40,8 @@
     "request": "^2.61.0",
     "rss": "^1.1.1",
     "string": "^3.3.1",
-    "susy": "^2.2.5"
+    "susy": "^2.2.5",
+    "through2": "^2.0.0"
   },
   "devDependencies": {
     "babel": "^5.8.23",
@@ -66,7 +67,6 @@
     "nock": "^2.10.0",
     "proxyquire": "^1.7.1",
     "rimraf": "^2.4.3",
-    "run-sequence": "^1.1.4",
-    "through2": "^2.0.0"
+    "run-sequence": "^1.1.4"
   }
 }
