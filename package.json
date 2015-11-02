@@ -1,6 +1,6 @@
 {
   "name": "reactifier",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "title": "Reactifier.",
   "description": "A blog post aggregator bringing together React developers from across the globe.",
   "main": "dist/index.js",
