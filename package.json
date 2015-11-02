@@ -1,6 +1,6 @@
 {
   "name": "reactifier",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "title": "Reactifier.",
   "description": "A blog post aggregator bringing together React developers from across the globe.",
   "main": "lib/index.js",
@@ -8,7 +8,6 @@
     "test": "istanbul cover _mocha",
     "deploy": "babel-node $(which gulp) build run"
   },
-  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bkonkle/reactifier.git"

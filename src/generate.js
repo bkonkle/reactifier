@@ -6,7 +6,6 @@ import createLogger from './create-logger'
 import frontMatter from 'front-matter'
 import Index from './components/index'
 import moment from 'moment'
-import pkg from '../package'
 import RSS from 'rss'
 
 const log = createLogger('generate')
@@ -78,8 +77,8 @@ export function renderIndex(posts) {
 
 export function renderFeed(posts) {
   const feed = new RSS({
-    title: pkg.title,
-    description: pkg.description,
+    title: 'Reactifier.',
+    description: 'A blog post aggregator bringing together React developers from across the globe.',
     /* eslint-disable camelcase */
     feed_url: 'http://reactifier.com/rss.xml',
     site_url: 'http://reactifier.com',
