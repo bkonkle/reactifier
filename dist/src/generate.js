@@ -33,6 +33,10 @@ var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
 
+var _package = require('../package');
+
+var _package2 = _interopRequireDefault(_package);
+
 var _rss = require('rss');
 
 var _rss2 = _interopRequireDefault(_rss);
@@ -108,8 +112,8 @@ function renderIndex(posts) {
 
 function renderFeed(posts) {
   var feed = new _rss2['default']({
-    title: 'Reactifier.',
-    description: 'A blog post aggregator bringing together React developers from across the globe.',
+    title: _package2['default'].title,
+    description: _package2['default'].description,
     /* eslint-disable camelcase */
     feed_url: 'http://reactifier.com/rss.xml',
     site_url: 'http://reactifier.com',

@@ -6,9 +6,8 @@ import fs from 'fs'
 import gulp from 'gulp'
 import gutil from 'gulp-util'
 import install from 'gulp-install'
-import lodash from 'lodash'
 import pkg from './package'
-import reactifier from './src/index'
+import reactifier from './src/reactifier'
 import rename from 'gulp-rename'
 import rimraf from 'rimraf'
 import runSequence from 'run-sequence'
@@ -30,6 +29,7 @@ gulp.task('build', done => {
       'build:sass',
       'build:deps',
       'build:env',
+      'build:copy',
     ],
     'build:zip',
   done)
@@ -52,7 +52,7 @@ gulp.task('build:js', () => {
   // Transpile es6 to the dist directory
   return gulp.src('src/**/*.js?(x)')
     .pipe(babel())
-    .pipe(gulp.dest('dist'))
+    .pipe(gulp.dest('dist/src'))
 })
 
 gulp.task('build:media', () => {
@@ -89,6 +89,11 @@ gulp.task('build:env', () => {
     .pipe(gulp.dest('dist'))
 })
 
+gulp.task('build:copy', () => {
+  return gulp.src(['subscriptions.json', 'index.js'])
+    .pipe(gulp.dest('dist'))
+})
+
 gulp.task('build:zip', () => {
   return gulp.src(['dist/**/*', 'dist/.*'])
     .pipe(zip(`reactifier.${pkg.version}.zip`))
@@ -104,31 +109,14 @@ gulp.task('deploy:upload', done => {
 
   const lambda = new AWS.Lambda()
 
-  lambda.getFunction({FunctionName: LAMBDA_FUNCTION}, (err, data) => {
-    if (err) {
-      if (err.statusCode === 404) {
-        gutil.log(
-          'Unable to find lambda function ' + LAMBDA_FUNCTION + '. Verify the ' +
-          'lambda function name and AWS region are correct.'
-        )
-      } else {
-        gutil.log(`AWS API request failed: ${err}`)
-      }
+  fs.readFile(`./build/reactifier.${pkg.version}.zip`, (readError, zipFile) => {
+    if (readError) {
+      throw new gutil.PluginError('Error reading package zip', readError)
     }
 
-    const current = data.Configuration
-    const config = lodash.extend({}, current, {FunctionName: LAMBDA_FUNCTION})
-
-    fs.readFile(`build/reactifier.${pkg.version}.zip`, (readError, zipFile) => {
-      config.ZipFile = zipFile
-
-      lambda.updateFunctionCode(config, error => {
-        if (error) {
-          gutil.log('Package upload failed. Check your iam:PassRole permissions.')
-        }
-      })
-
-      done()
-    })
+    lambda.updateFunctionCode({
+      FunctionName: LAMBDA_FUNCTION,
+      ZipFile: zipFile,
+    }, done)
   })
 })
