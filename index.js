@@ -1,3 +1,1 @@
-import reactifier from './lib/reactifier'
-
-export default reactifier
+module.exports = require('./lib/reactifier')
