@@ -21,3 +21,9 @@ body. The files are indexed for faster access.
 
 After all new posts are saved, a static site is generated to display the post
 previews and provide an RSS feed. The static site is hosted entirely through S3.
+
+## But, why??
+
+I didn't want to stand up $10/month cloud server and maintain it. Lambda allows
+me to periodically invoke my function, so I'm using a 128GB instance for about
+19 seconds every hour. That fits well within the free tier! \o/
