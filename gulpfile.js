@@ -96,6 +96,10 @@ gulp.task('build:zip', () => {
 })
 
 gulp.task('deploy:upload', done => {
+  AWS.config.credentials = new AWS.SharedIniFileCredentials({
+    profile: process.env.AWS_PROFILE,
+  })
+
   AWS.config.region = 'us-east-1'
 
   const lambda = new AWS.Lambda()
@@ -115,9 +119,10 @@ gulp.task('deploy:upload', done => {
     const current = data.Configuration
     const config = lodash.extend({}, current, {FunctionName: LAMBDA_FUNCTION})
 
-    fs.readFile(`build/reactifier.${pkg.version}.zip`, () => {
+    fs.readFile(`build/reactifier.${pkg.version}.zip`, (readError, zipFile) => {
+      config.ZipFile = zipFile
 
-      lambda.uploadFunction(config, error => {
+      lambda.updateFunctionCode(config, error => {
         if (error) {
           gutil.log('Package upload failed. Check your iam:PassRole permissions.')
         }
