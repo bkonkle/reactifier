@@ -1,6 +1,6 @@
 {
   "name": "reactifier",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "title": "Reactifier.",
   "description": "A blog post aggregator bringing together React developers from across the globe.",
   "main": "lib/index.js",
@@ -53,15 +53,20 @@
     "eslint-plugin-react": "^3.3.1",
     "gulp": "^3.9.0",
     "gulp-babel": "^5.2.1",
+    "gulp-install": "^0.6.0",
     "gulp-rename": "^1.2.2",
     "gulp-rimraf": "^0.2.0",
     "gulp-sass": "^2.0.4",
     "gulp-spawn-mocha": "^2.2.1",
+    "gulp-util": "^3.0.7",
+    "gulp-zip": "^3.0.2",
     "istanbul": "^0.4.0",
     "mime-types": "^2.1.6",
     "mocha": "^2.3.2",
     "nock": "^2.10.0",
     "proxyquire": "^1.7.1",
+    "rimraf": "^2.4.3",
+    "run-sequence": "^1.1.4",
     "through2": "^2.0.0"
   }
 }
