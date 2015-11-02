@@ -10,8 +10,9 @@ pids
 # Coverage directory used by tools like istanbul
 coverage
 
-# The dist folder for transpiled es6
-dist
+# Exclude a couple of things in the dist folder
+dist/node_modules
+dist/.env
 
 # The build folder for the AWS Lambda build
 build
