@@ -28,7 +28,6 @@ gulp.task('build', done => {
       'build:media',
       'build:sass',
       'build:deps',
-      'build:env',
       'build:copy',
     ],
     'build:zip',
@@ -52,7 +51,7 @@ gulp.task('build:js', () => {
   // Transpile es6 to the dist directory
   return gulp.src('src/**/*.js?(x)')
     .pipe(babel())
-    .pipe(gulp.dest('dist/src'))
+    .pipe(gulp.dest('dist/lib'))
 })
 
 gulp.task('build:media', () => {
@@ -83,14 +82,8 @@ gulp.task('build:deps', () => {
     .pipe(install({production: true}))
 })
 
-gulp.task('build:env', () => {
-  return gulp.src('.prod.env')
-    .pipe(rename('.env'))
-    .pipe(gulp.dest('dist'))
-})
-
 gulp.task('build:copy', () => {
-  return gulp.src(['subscriptions.json', 'index.js'])
+  return gulp.src(['.env', 'subscriptions.json', 'index.js'])
     .pipe(gulp.dest('dist'))
 })
 
@@ -101,10 +94,6 @@ gulp.task('build:zip', () => {
 })
 
 gulp.task('deploy:upload', done => {
-  AWS.config.credentials = new AWS.SharedIniFileCredentials({
-    profile: process.env.AWS_PROFILE,
-  })
-
   AWS.config.region = 'us-east-1'
 
   const lambda = new AWS.Lambda()

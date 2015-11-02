@@ -26,12 +26,6 @@ var _through2 = require('through2');
 var _through22 = _interopRequireDefault(_through2);
 
 function getS3() {
-  // Make sure the desired AWS credentials profile is used, even if the env var
-  // isn't available right away (such as when dotenv is used)
-  _awsSdk2['default'].config.credentials = new _awsSdk2['default'].SharedIniFileCredentials({
-    profile: process.env.AWS_PROFILE
-  });
-
   return new _awsSdk2['default'].S3({ params: { Bucket: process.env.S3_BUCKET } });
 }
 

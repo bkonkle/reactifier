@@ -1,3 +1,3 @@
-import reactifier from './lib/reactifier'
+require('es6-promise').polyfill()
 
-export default reactifier
+exports.default = require('./lib/reactifier')

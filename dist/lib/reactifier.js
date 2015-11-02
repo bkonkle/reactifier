@@ -37,7 +37,7 @@ var log = (0, _createLogger2['default'])('reactifier');
  * site on S3.
  */
 
-function reactifier() {
+function reactifier(event, context) {
   log.info('Retrieving subscriptions...');
 
   // First, retrieve a combined feed of all subscriptions
@@ -80,6 +80,11 @@ function reactifier() {
   // Report success
   .then(function () {
     log.info(_chalk2['default'].green('Done!'));
+
+    // If there is a Lambda context object present, call its done callback
+    if (context && typeof context.done === 'function') {
+      context.done();
+    }
   });
 }
 

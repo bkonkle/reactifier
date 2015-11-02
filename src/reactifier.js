@@ -15,7 +15,7 @@ const log = createLogger('reactifier')
  * orchestrates the entire process from start to finish, resulting in a static
  * site on S3.
  */
-export default function reactifier() {
+export default function reactifier(event, context) {
   log.info('Retrieving subscriptions...')
 
   // First, retrieve a combined feed of all subscriptions
@@ -58,6 +58,11 @@ export default function reactifier() {
     // Report success
     .then(() => {
       log.info(chalk.green('Done!'))
+
+      // If there is a Lambda context object present, call its done callback
+      if (context && typeof context.done === 'function') {
+        context.done()
+      }
     })
 }
 

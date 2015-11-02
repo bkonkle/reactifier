@@ -1,1 +1,3 @@
-module.exports = require('./lib/reactifier')
+require('es6-promise').polyfill()
+
+exports.default = require('./lib/reactifier')
