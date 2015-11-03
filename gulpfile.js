@@ -49,9 +49,9 @@ gulp.task('build:clean', done => {
 
 gulp.task('build:js', () => {
   // Transpile es6 to the dist directory
-  return gulp.src('src/**/*.js?(x)')
+  return gulp.src(['src/**/*.js?(x)', 'lambda.js'], {base: '.'})
     .pipe(babel())
-    .pipe(gulp.dest('dist/lib'))
+    .pipe(gulp.dest('dist'))
 })
 
 gulp.task('build:media', () => {
@@ -83,7 +83,7 @@ gulp.task('build:deps', () => {
 })
 
 gulp.task('build:copy', () => {
-  return gulp.src(['.env', 'subscriptions.json', 'index.js'])
+  return gulp.src(['.env', 'subscriptions.json'])
     .pipe(gulp.dest('dist'))
 })
 

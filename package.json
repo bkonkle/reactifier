@@ -3,7 +3,7 @@
   "version": "1.0.5",
   "title": "Reactifier.",
   "description": "A blog post aggregator bringing together React developers from across the globe.",
-  "main": "dist/index.js",
+  "main": "dist/lambda.js",
   "scripts": {
     "test": "istanbul cover _mocha",
     "deploy": "babel-node $(which gulp) build run"
@@ -25,10 +25,10 @@
   "homepage": "https://github.com/bkonkle/reactifier#readme",
   "dependencies": {
     "aws-sdk": "^2.1.50",
+    "babel-polyfill": "^6.0.16",
     "bunyan": "^1.5.1",
     "chalk": "^1.1.1",
     "dotenv": "^1.2.0",
-    "es6-promise": "^3.0.2",
     "feedparser": "^1.1.3",
     "front-matter": "^1.0.0",
     "he": "^0.5.0",
