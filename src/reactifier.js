@@ -18,22 +18,18 @@ const log = createLogger('reactifier')
 export default function reactifier(event, context) {
   log.info('Retrieving subscriptions...')
 
-  // First, retrieve a combined feed of all subscriptions
   return getSubscriptionFeed()
 
-    // Then, save the new posts to S3
     .then(feed => {
-      log.info('Saving new posts to S3...')
+      log.info('Saving posts to S3...')
       return saveFeed(feed)
     })
 
-    // Generate the site
-    .then(() => {
+    .then(posts => {
       log.info('Generating the site...')
-      return generateSite()
+      return generateSite(posts)
     })
 
-    // Finally, save the index and feed to S3
     .then(site => {
       log.info('Uploading the site to S3...')
 

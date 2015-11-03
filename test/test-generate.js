@@ -12,7 +12,7 @@ describe('generate', () => {
 
   const expectedHtml = '<html><body>New React Developer Tools</body></html>'
 
-  const {sampleIndex, sampleMarkdown, mockS3} = getMockS3()
+  const {sampleMarkdown, mockS3} = getMockS3()
   const {sampleFeed, sampleFeedXml} = getSampleFeed()
 
   const {generateSite, renderIndex, renderFeed} = proxyquire('../src/generate', {
@@ -22,41 +22,16 @@ describe('generate', () => {
 
   describe('generateSite()', () => {
 
-    it('retrieves the index', () => {
-      let called = false
-
-      mockS3.getObject = (options, callback) => {
-        // For this test, we only care about the first time it's called
-        if (!called) {
-          called = true
-          expect(options.Key).to.equal('posts/index.json')
-          callback(undefined, {Body: JSON.stringify(sampleIndex)})
-        } else {
-          // The second getObject call should be for the file itself, expecting
-          // markdown content
-          callback(undefined, {Body: sampleMarkdown})
-        }
-      }
-
-      return generateSite().then(() => {
-        expect(called).to.be.true
-      })
-    })
-
     it('iterates over each post and retrieves the content', () => {
       let called = false
 
       mockS3.getObject = (options, callback) => {
-        if (options.Key === 'posts/index.json') {
-          callback(undefined, {Body: JSON.stringify(sampleIndex)})
-        } else {
-          expect(options.Key).to.equal(`posts/${md5(samplePost.guid)}.md`)
+        expect(options.Key).to.equal(`posts/${md5(samplePost.guid)}.md`)
 
-          called = true
+        called = true
 
-          // Return the markdown from the file
-          callback(undefined, {Body: sampleMarkdown})
-        }
+        // Return the markdown from the file
+        callback(undefined, {Body: sampleMarkdown})
       }
 
       return generateSite().then(() => {
@@ -66,21 +41,14 @@ describe('generate', () => {
 
     it('generates a homepage using React', () => {
       mockS3.getObject = (options, callback) => {
-        if (options.Key === 'posts/index.json') {
-          // Return the sample index
-          callback(undefined, {Body: JSON.stringify(sampleIndex)})
-        } else {
-          // Return the markdown from the file
-          callback(undefined, {Body: sampleMarkdown})
-        }
+        // Return the markdown from the file
+        callback(undefined, {Body: sampleMarkdown})
       }
 
       const result = generateSite()
 
       return expect(result).to.eventually.have.property('index', expectedHtml)
     })
-
-    it('removes missing files from the index')
 
   })
 
