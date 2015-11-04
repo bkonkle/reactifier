@@ -1,6 +1,6 @@
 {
   "name": "reactifier",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "title": "Reactifier.",
   "description": "A blog post aggregator bringing together React developers from across the globe.",
   "main": "dist/lambda.js",
@@ -37,7 +37,7 @@
     "md5": "^2.0.0",
     "mime-types": "^2.1.6",
     "moment": "^2.10.6",
-    "react": "^0.13.3",
+    "react": "^0.14.2",
     "request": "^2.61.0",
     "rss": "^1.1.1",
     "string": "^3.3.1",
@@ -45,7 +45,7 @@
     "through2": "^2.0.0"
   },
   "devDependencies": {
-    "babel": "^5.8.23",
+    "babel": "^6.0.15",
     "babel-eslint": "^4.1.1",
     "babel-plugin-object-assign": "^1.2.1",
     "chai": "^3.2.0",
@@ -53,8 +53,10 @@
     "eslint": "^1.3.1",
     "eslint-config-ecliptic": "^1.1.1",
     "eslint-plugin-react": "^3.3.1",
+    "expect": "^1.12.2",
+    "expect-jsx": "^2.1.0",
     "gulp": "^3.9.0",
-    "gulp-babel": "^5.2.1",
+    "gulp-babel": "^6.0.0",
     "gulp-install": "^0.6.0",
     "gulp-rename": "^1.2.2",
     "gulp-rimraf": "^0.2.0",
@@ -66,6 +68,7 @@
     "mocha": "^2.3.2",
     "nock": "^2.10.0",
     "proxyquire": "^1.7.1",
+    "react-addons-test-utils": "^0.14.2",
     "rimraf": "^2.4.3",
     "run-sequence": "^1.1.4"
   }
