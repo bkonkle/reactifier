@@ -1,5 +1,7 @@
 # Reactifier.
 
+[http://reactifier.com](http://reactifier.com)
+
 A blog post aggregator bringing together React developers from across the globe.
 
 ## How do I add my feed?
