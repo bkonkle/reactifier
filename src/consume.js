@@ -5,6 +5,8 @@ import request from 'request'
 import string from 'string'
 import subscriptions from '../subscriptions'
 
+const PER_FEED_LIMIT = 5
+
 export function getSubscriptionFeed(subs = subscriptions) {
   // For each feed, request the posts
   const feeds = subs.map(subscription => {
@@ -85,8 +87,8 @@ export function transformPost(post) {
 export function combineFeeds(combined, feed) {
   const subscription = lodash.omit(feed, 'posts')
 
-  // Add the subscription data to each post
-  const posts = feed.posts.map(
+  // Limit the number of posts per feed and add the subscription data
+  const posts = feed.posts.slice(0, PER_FEED_LIMIT).map(
     (post) => Object.assign({}, post, {subscription})
   )
 

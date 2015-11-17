@@ -18,9 +18,10 @@ describe('consume', () => {
 
   describe('getSubscriptionFeed()', () => {
 
+    // TODO: Test this more thoroughly
     it('retrieves each subscribed feed and returns an array of normalized posts', () => {
       const promise = getSubscriptionFeed(subscriptions)
-      return expect(promise).to.eventually.have.length(13)
+      return expect(promise).to.eventually.have.length(8)
     })
 
   })

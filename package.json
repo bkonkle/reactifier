@@ -1,6 +1,6 @@
 {
   "name": "reactifier",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "title": "Reactifier.",
   "description": "A blog post aggregator bringing together React developers from across the globe.",
   "main": "dist/lambda.js",

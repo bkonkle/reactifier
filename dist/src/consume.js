@@ -37,6 +37,8 @@ var _subscriptions = require('../subscriptions');
 
 var _subscriptions2 = _interopRequireDefault(_subscriptions);
 
+var PER_FEED_LIMIT = 5;
+
 function getSubscriptionFeed() {
   var subs = arguments.length <= 0 || arguments[0] === undefined ? _subscriptions2['default'] : arguments[0];
 
@@ -128,7 +130,7 @@ function combineFeeds(combined, feed) {
   var subscription = _lodash2['default'].omit(feed, 'posts');
 
   // Add the subscription data to each post
-  var posts = feed.posts.map(function (post) {
+  var posts = feed.posts.slice(0, PER_FEED_LIMIT).map(function (post) {
     return _extends({}, post, { subscription: subscription });
   });
 
