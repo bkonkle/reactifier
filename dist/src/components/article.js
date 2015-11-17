@@ -107,7 +107,7 @@ Article.propTypes = {
   description: _react.PropTypes.string.isRequired,
   guid: _react.PropTypes.string.isRequired,
   link: _react.PropTypes.string.isRequired,
-  pubDate: _react.PropTypes.string.isRequired,
+  pubDate: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.date]).isRequired,
   subscription: _react.PropTypes.shape({
     title: _react.PropTypes.string.isRequired,
     description: _react.PropTypes.string,
