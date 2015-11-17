@@ -1,6 +1,7 @@
 import {uploadToS3} from './src/s3-utils'
 import AWS from 'aws-sdk'
 import babel from 'gulp-babel'
+import {exec} from 'child_process'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import gulp from 'gulp'
@@ -9,7 +10,6 @@ import install from 'gulp-install'
 import pkg from './package'
 import reactifier from './src/reactifier'
 import rename from 'gulp-rename'
-import rimraf from 'rimraf'
 import runSequence from 'run-sequence'
 import sass from 'gulp-sass'
 import zip from 'gulp-zip'
@@ -44,7 +44,7 @@ gulp.task('run', ['build:js'], () => {
 })
 
 gulp.task('build:clean', done => {
-  rimraf('dist', done)
+  exec(`rm -rf ${__dirname + '/dist'}`, done)
 })
 
 gulp.task('build:js', () => {

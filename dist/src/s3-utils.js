@@ -1,13 +1,11 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getS3 = getS3;
 exports.callS3 = callS3;
 exports.uploadToS3 = uploadToS3;
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _awsSdk = require('aws-sdk');
 
@@ -21,12 +19,14 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
-var _through2 = require('through2');
+var _through = require('through2');
 
-var _through22 = _interopRequireDefault(_through2);
+var _through2 = _interopRequireDefault(_through);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getS3() {
-  return new _awsSdk2['default'].S3({ params: { Bucket: process.env.S3_BUCKET } });
+  return new _awsSdk2.default.S3({ params: { Bucket: process.env.S3_BUCKET } });
 }
 
 /**
@@ -37,7 +37,6 @@ function getS3() {
  * @param {Object} options - the options to pass with the call
  * @returns {Promise}
  */
-
 function callS3(s3, method, options) {
   return new Promise(function (resolve, reject) {
     s3[method](options, function (err, response) {
@@ -53,15 +52,15 @@ function callS3(s3, method, options) {
 function uploadToS3() {
   var s3 = getS3();
 
-  return _through22['default'].obj(function (file, enc, cb) {
+  return _through2.default.obj(function (file, enc, cb) {
     // Find the relative path based on the current working directory
-    var dest = _path2['default'].relative(process.cwd(), file.path);
+    var dest = _path2.default.relative(process.cwd(), file.path);
 
     // Upload the file to S3
     callS3(s3, 'upload', {
       Key: dest,
       Body: file.contents,
-      ContentType: _mimeTypes2['default'].lookup(file.path)
+      ContentType: _mimeTypes2.default.lookup(file.path)
     })
 
     // Hit the callback when the upload is done

@@ -1,7 +1,6 @@
 import {generateSite} from './generate'
-import {getS3, callS3} from './s3-utils'
 import {getSubscriptionFeed} from './consume'
-import {saveFeed} from './save'
+import {uploadSite} from './upload'
 import chalk from 'chalk'
 import createLogger from './create-logger'
 import dotenv from 'dotenv'
@@ -21,38 +20,16 @@ export default function reactifier(event, context) {
   // First, retrieve a combined feed of all subscriptions
   return getSubscriptionFeed()
 
-    // Then, save the new posts to S3
-    .then(feed => {
-      log.info('Saving new posts to S3...')
-      return saveFeed(feed)
-    })
-
     // Generate the site
-    .then(() => {
+    .then(feed => {
       log.info('Generating the site...')
-      return generateSite()
+      return generateSite(feed)
     })
 
     // Finally, save the index and feed to S3
     .then(site => {
       log.info('Uploading the site to S3...')
-
-      const s3 = getS3()
-
-      const indexPromise = callS3(s3, 'upload', {
-        Key: 'index.html',
-        Body: `<!doctype html>${site.index}`,
-        ContentType: 'text/html',
-      })
-
-      const feedPromise = callS3(s3, 'upload', {
-        Key: 'rss.xml',
-        Body: site.feed,
-        ContentType: 'application/rss+xml',
-      })
-
-      // Return a promise that resolves when both have been uploaded
-      return Promise.all([indexPromise, feedPromise])
+      return uploadSite(site)
     })
 
     // Report success

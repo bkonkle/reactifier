@@ -7,25 +7,22 @@ export default class Article extends Component {
   static displayName = 'Article';
 
   static propTypes = {
-    attributes: PropTypes.shape({
-      author: PropTypes.string,
-      guid: PropTypes.string.isRequired,
-      link: PropTypes.string.isRequired,
-      pubDate: PropTypes.instanceOf(Date).isRequired,
+    author: PropTypes.string,
+    description: PropTypes.string.isRequired,
+    guid: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+    pubDate: PropTypes.string.isRequired,
+    subscription: PropTypes.shape({
       title: PropTypes.string.isRequired,
-      subscription: PropTypes.shape({
-        title: PropTypes.string.isRequired,
-        description: PropTypes.string,
-        link: PropTypes.string.isRequired,
-        feedLink: PropTypes.string,
-      }),
-    }).isRequired,
-    body: PropTypes.string.isRequired,
+      description: PropTypes.string,
+      link: PropTypes.string.isRequired,
+      feedLink: PropTypes.string,
+    }),
+    title: PropTypes.string.isRequired,
   };
 
   render() {
-    const {attributes, body} = this.props
-    const {author, link, pubDate, subscription, title} = attributes
+    const {author, description, link, pubDate, subscription, title} = this.props
     const date = moment(pubDate)
 
     return (
@@ -33,7 +30,7 @@ export default class Article extends Component {
         <h2><a href={link}>{he.decode(title)}</a></h2>
         <section>
           <p>
-            {he.decode(body)} <a className="read-more" href={link}>» read more</a>
+            {he.decode(description)} <a className="read-more" href={link}>» read more</a>
           </p>
         </section>
         <footer>

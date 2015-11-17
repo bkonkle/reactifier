@@ -2,7 +2,7 @@
   {
     "title": "the Official React Blog",
     "description": "Facebook's official React Blog feed",
-    "feedLink": "https://facebook.github.io/react/feed.xml",
+    "feedLink": "http://facebook.github.io/react/feed.xml",
     "link": "http://facebook.github.io/react/blog/"
   },
   {
