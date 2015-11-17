@@ -64,5 +64,11 @@
     "description": "Blog posts by Merrick Christensen",
     "feedLink": "http://www.merrickchristensen.com/atom.xml",
     "link": "http://www.merrickchristensen.com"
+  },
+  {
+    "title": "React.rocks",
+    "description": "React Examples",
+    "feedLink": "http://react.rocks/blog/index.xml",
+    "link": "http://react.rocks/blog"
   }
 ]
