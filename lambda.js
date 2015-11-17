@@ -1,4 +1,2 @@
-import 'babel/polyfill'
-import reactifier from './src/reactifier'
-
-export default reactifier
+require('babel/polyfill')
+exports.reactifier = require('./src/reactifier')

@@ -129,7 +129,7 @@ function transformPost(post) {
 function combineFeeds(combined, feed) {
   var subscription = _lodash2['default'].omit(feed, 'posts');
 
-  // Add the subscription data to each post
+  // Limit the number of posts per feed and add the subscription data
   var posts = feed.posts.slice(0, PER_FEED_LIMIT).map(function (post) {
     return _extends({}, post, { subscription: subscription });
   });
