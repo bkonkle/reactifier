@@ -1,19 +1,21 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 exports.generateSite = generateSite;
 exports.renderIndex = renderIndex;
 exports.renderFeed = renderFeed;
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
 var _react = require('react');
 
-var _server = require('react-dom/server');
+var _reactDomServer = require('react-dom/server');
 
-var _index = require('./components/index');
+var _componentsIndex = require('./components/index');
 
-var _index2 = _interopRequireDefault(_index);
+var _componentsIndex2 = _interopRequireDefault(_componentsIndex);
 
 var _moment = require('moment');
 
@@ -27,8 +29,6 @@ var _rss = require('rss');
 
 var _rss2 = _interopRequireDefault(_rss);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function generateSite(posts) {
   // Render the index component and the rss feed with the context
   var index = renderIndex(posts);
@@ -38,20 +38,20 @@ function generateSite(posts) {
 }
 
 function renderIndex(posts) {
-  return (0, _server.renderToStaticMarkup)((0, _react.createElement)(_index2.default, { posts: posts }));
+  return (0, _reactDomServer.renderToStaticMarkup)((0, _react.createElement)(_componentsIndex2['default'], { posts: posts }));
 }
 
 function renderFeed(posts) {
-  var feed = new _rss2.default({
-    title: _package2.default.title,
-    description: _package2.default.description,
+  var feed = new _rss2['default']({
+    title: _package2['default'].title,
+    description: _package2['default'].description,
     /* eslint-disable camelcase */
     feed_url: 'http://reactifier.com/rss.xml',
     site_url: 'http://reactifier.com',
     /* eslint-enable camelcase */
     language: 'en',
     categories: ['React', 'React.js', 'JavaScript', 'Node'],
-    pubDate: (0, _moment2.default)().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
+    pubDate: (0, _moment2['default'])().format('ddd, DD MMM YYYY HH:mm:ss ZZ'),
     ttl: '60'
   });
 
@@ -71,7 +71,7 @@ function renderFeed(posts) {
       guid: guid,
       categories: ['React', 'React.js', 'JavaScript', 'Node'],
       author: author || subscription && subscription.title,
-      date: (0, _moment2.default)(pubDate).format('ddd, DD MMM YYYY HH:mm:ss ZZ')
+      date: (0, _moment2['default'])(pubDate).format('ddd, DD MMM YYYY HH:mm:ss ZZ')
     });
   });
 

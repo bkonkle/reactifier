@@ -9,10 +9,9 @@ export default class Index extends Component {
 
   static propTypes = {
     posts: PropTypes.array.isRequired,
-  };
+  }
 
   render() {
-
     return (
       <html>
         <Head/>

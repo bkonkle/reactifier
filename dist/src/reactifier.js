@@ -1,9 +1,11 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
-exports.default = reactifier;
+exports['default'] = reactifier;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _generate = require('./generate');
 
@@ -23,17 +25,16 @@ var _dotenv = require('dotenv');
 
 var _dotenv2 = _interopRequireDefault(_dotenv);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+_dotenv2['default'].load();
 
-_dotenv2.default.load();
-
-var log = (0, _createLogger2.default)('reactifier');
+var log = (0, _createLogger2['default'])('reactifier');
 
 /*
  * This is the main entry point of reactifier, run within Amazon Lambda. It
  * orchestrates the entire process from start to finish, resulting in a static
  * site on S3.
  */
+
 function reactifier(event, context) {
   log.info('Retrieving subscriptions...');
 
@@ -54,7 +55,7 @@ function reactifier(event, context) {
 
   // Report success
   .then(function () {
-    log.info(_chalk2.default.green('Done!'));
+    log.info(_chalk2['default'].green('Done!'));
 
     // If there is a Lambda context object present, call its done callback
     if (context && typeof context.done === 'function') {
@@ -67,3 +68,4 @@ function reactifier(event, context) {
 if (require.main === module) {
   reactifier();
 }
+module.exports = exports['default'];

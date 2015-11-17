@@ -1,14 +1,17 @@
 'use strict';
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 exports.getSubscriptionFeed = getSubscriptionFeed;
 exports.requestPosts = requestPosts;
 exports.transformPost = transformPost;
 exports.combineFeeds = combineFeeds;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 var _feedparser = require('feedparser');
 
@@ -34,10 +37,8 @@ var _subscriptions = require('../subscriptions');
 
 var _subscriptions2 = _interopRequireDefault(_subscriptions);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function getSubscriptionFeed() {
-  var subs = arguments.length <= 0 || arguments[0] === undefined ? _subscriptions2.default : arguments[0];
+  var subs = arguments.length <= 0 || arguments[0] === undefined ? _subscriptions2['default'] : arguments[0];
 
   // For each feed, request the posts
   var feeds = subs.map(function (subscription) {
@@ -68,8 +69,8 @@ function requestPosts(subscription) {
   var title = subscription.title;
   var feedLink = subscription.feedLink;
 
-  var req = (0, _request2.default)(feedLink);
-  var feedparser = new _feedparser2.default();
+  var req = (0, _request2['default'])(feedLink);
+  var feedparser = new _feedparser2['default']();
 
   // Return a promise that will resolve when the feed is retrieved
   return new Promise(function (resolve, reject) {
@@ -116,7 +117,7 @@ function transformPost(post) {
   var guid = post.guid;
   var description = post.description;
 
-  var preview = (0, _string2.default)(description).stripTags().truncate(500).toString();
+  var preview = (0, _string2['default'])(description).stripTags().truncate(500).toString();
 
   // Return a subset of properties available on the post, along with a
   // truncated description that has had HTML tags stripped out of it.
@@ -124,7 +125,7 @@ function transformPost(post) {
 }
 
 function combineFeeds(combined, feed) {
-  var subscription = _lodash2.default.omit(feed, 'posts');
+  var subscription = _lodash2['default'].omit(feed, 'posts');
 
   // Add the subscription data to each post
   var posts = feed.posts.map(function (post) {
@@ -135,7 +136,7 @@ function combineFeeds(combined, feed) {
   var result = combined.concat(posts);
 
   // Sort them by the pubDate in descending order, parsed by moment
-  return _lodash2.default.sortBy(result, function (post) {
-    return -(0, _moment2.default)(post.pubDate).valueOf();
+  return _lodash2['default'].sortBy(result, function (post) {
+    return -(0, _moment2['default'])(post.pubDate).valueOf();
   });
 }

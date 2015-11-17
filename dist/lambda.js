@@ -1,15 +1,16 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-require('babel-polyfill');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _reactifier = require('./src/reactifier');
+require('babel/polyfill');
 
-var _reactifier2 = _interopRequireDefault(_reactifier);
+var _srcReactifier = require('./src/reactifier');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _srcReactifier2 = _interopRequireDefault(_srcReactifier);
 
-exports.default = _reactifier2.default;
+exports['default'] = _srcReactifier2['default'];
+module.exports = exports['default'];
