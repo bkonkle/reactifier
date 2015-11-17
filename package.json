@@ -6,6 +6,7 @@
   "main": "dist/lambda.js",
   "scripts": {
     "test": "istanbul cover _mocha",
+    "run": "babel-node $(which gulp) build run",
     "deploy": "babel-node $(which gulp) deploy"
   },
   "repository": {
@@ -61,7 +62,6 @@
     "gulp-babel": "^6.1.0",
     "gulp-install": "^0.6.0",
     "gulp-rename": "^1.2.2",
-    "gulp-rimraf": "^0.2.0",
     "gulp-sass": "^2.0.4",
     "gulp-spawn-mocha": "^2.2.1",
     "gulp-util": "^3.0.7",

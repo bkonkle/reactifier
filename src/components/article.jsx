@@ -11,7 +11,10 @@ export default class Article extends Component {
     description: PropTypes.string.isRequired,
     guid: PropTypes.string.isRequired,
     link: PropTypes.string.isRequired,
-    pubDate: PropTypes.string.isRequired,
+    pubDate: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.date,
+    ]).isRequired,
     subscription: PropTypes.shape({
       title: PropTypes.string.isRequired,
       description: PropTypes.string,
