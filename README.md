@@ -15,12 +15,9 @@ Event every hour. AWS executes the default export on the index module, which is
 the `reactifier()` function.
 
 The function pulls down all subscribed RSS feeds based on the
-`subscriptions.json` file. For each new post, a markdown file is created on S3
-with yaml front matter for metadata and a preview of the post in the markdown
-body. The files are indexed for faster access.
-
-After all new posts are saved, a static site is generated to display the post
-previews and provide an RSS feed. The static site is hosted entirely through S3.
+`subscriptions.json` file. After the latest posts are retrieved, a static site
+is generated to display the post previews and provide an RSS feed. The static
+site is hosted entirely through S3.
 
 ## But, why??
 
