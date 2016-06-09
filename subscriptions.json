@@ -70,5 +70,11 @@
     "description": "React Examples",
     "feedLink": "http://react.rocks/blog/index.xml",
     "link": "http://react.rocks/blog"
+  },
+  {
+    "title": "Modus Create Front End Development",
+    "description": "Modus Create engineers sharing experience of building top notch web apps with React and others",
+    "feedLink": "https://medium.com/feed/modus-create-front-end-development",
+    "link": "https://medium.com/modus-create-front-end-development"
   }
 ]
