@@ -52,7 +52,11 @@ export function cleanUpNock() {
 }
 
 export function getMockS3() {
-  const sampleMarkdown = fs.readFileSync(path.join(__dirname, 'fixtures', 'sample-post.md')).toString()
+  const sampleMarkdown = fs.readFileSync(path.join(
+    __dirname,
+    'fixtures',
+    'sample-post.md'
+  )).toString()
 
   const guid = 'https://facebook.github.io/react/blog/2015/09/02/new-react-developer-tools.html'
 
@@ -75,6 +79,10 @@ export function getMockS3() {
 }
 
 export function getSampleFeed() {
-  const sampleFeedXml = fs.readFileSync(path.join(__dirname, 'fixtures', 'sample-feed.xml')).toString()
+  const sampleFeedXml = fs.readFileSync(path.join(
+    __dirname,
+    'fixtures',
+    'sample-feed.xml'
+  )).toString()
   return {sampleFeed, sampleFeedXml}
 }
