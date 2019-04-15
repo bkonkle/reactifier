@@ -1,4 +1,4 @@
-# Reactifier.
+# [DEPRECATED] Reactifier.
 
 [http://reactifier.com](http://reactifier.com)
 
